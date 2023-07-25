@@ -4,7 +4,7 @@ import pytest
 import pandas
 from numpy.testing import assert_allclose
 
-from landlev.model import Model
+from PyLandside.model import Model
 
 
 '''
