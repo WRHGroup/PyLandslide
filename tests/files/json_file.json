@@ -1,0 +1,9 @@
+{
+    "dem_dir":"tests/files/dem/1_m_dem.tif",
+    "progress_reporting_interval":25,
+    "objectives":[
+        "cut_volume",
+        "fill_volume",
+        "number_of_sinks"
+    ]
+}
