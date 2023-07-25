@@ -3,32 +3,17 @@ import datetime
 import pytest
 import pandas
 from numpy.testing import assert_allclose
+from PyLandside.weightrange import WeightRangeEstimator
 
-from PyLandside.model import Model
 
+def test_json_loading():
+    #Test that the json file loaded
+    WeightRangeModel = WeightRangeEstimator('tests/files/weight_range_json_file.json')
+    WeightRangeModel.setup()
 
-'''
-def test_file_name():
-    #Test that the directory is successfully loaded
-    # load a model from a dem file
-    model = Model('tests/files/json_file.json')
-    model.setup()
-    file_path = os.path.join(os.getcwd(),'tests/files/dem/1_m_dem.tif')
-    assert(model.dem_file == file_path)
-
-def test_setup_model():
-    #Test that the loads the files successfully
-    # load a model from a dem file
-    model = Model('tests/files/json_file.json')
-    model.setup()
-    assert model.dataset is not None
-    assert model.DEM_np is not None
-
-def test_run_model_sinks():
-    #Test that the model determines the sinks successfuly
-    # load a model from a dem file
-    model = Model('tests/files/json_file.json')
-    model.setup()
-    model.run()
-    assert(model.number_of_sinks == 32969.0)
-'''
+    features_file_path = os.path.join(os.getcwd(),'tests/files/ml/features.csv')
+    assert(WeightRangeModel.features_file == features_file_path)
+    targets_file_path = os.path.join(os.getcwd(),'tests/files/ml/targets.csv')
+    assert(WeightRangeModel.targets_file == targets_file_path)
+    tree_depths_file_path = os.path.join(os.getcwd(),'tests/files/ml/tree_depths_by_target.csv')
+    assert(WeightRangeModel.tree_depths_file == tree_depths_file_path)

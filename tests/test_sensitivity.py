@@ -4,8 +4,6 @@ import pytest
 import pandas
 from numpy.testing import assert_allclose
 
-from PyLandside.model import Model
-
 
 '''
 def test_file_name():
