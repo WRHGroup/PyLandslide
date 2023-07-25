@@ -9,7 +9,7 @@ import matplotlib.pyplot as plt
 from osgeo import gdal
 import random
 import logging
-from sklearn.ensemble import RandomForestRegressor, RandomForestClassifier
+from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import r2_score, mean_absolute_error, max_error, mean_squared_error, confusion_matrix
 logger = logging.getLogger(__name__)
