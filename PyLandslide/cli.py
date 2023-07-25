@@ -3,7 +3,7 @@ import click
 import os
 import sys
 import logging
-from PyLandside.weightrange import *
+from PyLandslide.weightrange import *
 import random
 
 logger = logging.getLogger(__name__)
