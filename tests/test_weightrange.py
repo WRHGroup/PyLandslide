@@ -76,3 +76,4 @@ def test_random_forest_model_metric_model():
     assert(type(importances[1]) == RandomForestClassifier)
     assert(type(importances[0]) == np.ndarray)
     assert(max(importances[0]) <= 1)
+    assert(min(importances[0]) >= 0)
