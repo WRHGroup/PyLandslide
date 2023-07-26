@@ -43,7 +43,7 @@ class WeightRangeEstimator(object):
             self.number_trees = loaded_file.pop('number_trees')
 
         if loaded_file.get('output_file') is None:
-            print('output file set to weight_ranges.csv in the cwd. If you wish to change this default value, add number_trees to the inputs provided in the JSON file')
+            print('output file set to weight_ranges.csv in the cwd. If you wish to change this default value, add output_file to the inputs provided in the JSON file')
             self.output_file = os.path.join(os.getcwd(), 'weight_ranges.csv')
         else:
             self.output_file = os.path.join(os.getcwd(), loaded_file.pop('output_file'))

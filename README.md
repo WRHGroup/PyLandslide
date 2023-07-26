@@ -9,9 +9,8 @@
 4. conda install click
 5. conda install numpy
 6. conda install pandas
-7. conda install matplotlib
-8. pip install sklearn
-9. conda install gdal=3.0
+7. pip install sklearn
+8. conda install gdal=3.0
 
 Install landlev
 ```bash
