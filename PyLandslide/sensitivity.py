@@ -122,7 +122,7 @@ class SensitivityEstimator(object):
                 calc_add = "+("+alphabets[w]+"*"+str(weight_value)+")"
                 calc_formula+=calc_add 
 
-        full_calculation_command = "gdal_calc.py --quiet --overwrite --extent=union --outfile "+self.output_directory+"/lss.tif"
+        full_calculation_command = "gdal_calc.py --quiet --overwrite --extent=union --outfile "+self.output_directory+"/temp_lss.tif"
         for f, factor_file_dir in enumerate(self.factor_files):
             cmd_add = " -"+ alphabets[f] + " "+ factor_file_dir
             full_calculation_command+=cmd_add 
@@ -130,7 +130,7 @@ class SensitivityEstimator(object):
         full_calculation_command+= (" --calc="+calc_formula)
         os.system(full_calculation_command)
 
-        lss_dataset = self.load_dataset(file_path=os.path.join(self.output_directory,"lss.tif"))
+        lss_dataset = self.load_dataset(file_path=os.path.join(self.output_directory,"temp_lss.tif"))
         lss_np = self.raster_to_numpy(raster_dataset=lss_dataset, no_data_value=lss_dataset.GetRasterBand(1).GetNoDataValue())
 
         susceptibility_class_pixels = self.number_of_pixels_in_susceptibility_classes(susceptibility_raster=lss_np)
@@ -204,8 +204,7 @@ class SensitivityEstimator(object):
             fn = os.path.join(self.output_directory, 'sensitivity_results.csv')
             final_result_pd.to_csv(fn)
 
-        os.remove('temp_lss.tif')
-        print("process completed.")
+        os.remove(os.path.join(self.output_directory, 'temp_lss.tif'))
 
     def setup(self):
         self.load_data_from_json()
