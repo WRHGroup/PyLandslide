@@ -1,17 +1,11 @@
 #loading neccessery packages
 import os
-import click
 import json
-import numpy as np
 import pandas as pd
-import time
-import matplotlib.pyplot as plt
-from osgeo import gdal
-import random
 import logging
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import train_test_split
-from sklearn.metrics import r2_score, mean_absolute_error, max_error, mean_squared_error, confusion_matrix
+from sklearn.metrics import confusion_matrix
 logger = logging.getLogger(__name__)
 
 class WeightRangeEstimator(object):
