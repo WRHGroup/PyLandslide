@@ -20,6 +20,7 @@ def weightrange(file_name):
     logger.info('Starting the process.')
     WeightRangeModel = WeightRangeEstimator(json_file = file_name)
     WeightRangeModel.setup()
+    WeightRangeModel.calculate_weight_range()
 
 def start_cli():
     """ Start the command line interface. """
