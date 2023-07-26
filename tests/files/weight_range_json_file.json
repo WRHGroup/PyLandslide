@@ -8,5 +8,5 @@
     "number_of_iterations":20,
     "cores":5,
     "performance_cutoff":0.75,
-    "output_file":"tests/files/weight_ranges.csv"
+    "output_file":"tests/files/outputs/weight_ranges.csv"
 }
