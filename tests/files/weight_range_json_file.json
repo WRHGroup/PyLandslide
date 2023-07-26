@@ -3,6 +3,7 @@
     "targets_file":"tests/files/ml/targets.csv",
     "tree_depths_file":"tests/files/ml/tree_depths_by_target.csv",
     "number_trees":100,
+    "max_tree_depth":100,
     "size_testing_sample":0.2,
     "number_of_iterations":20,
     "cores":5,

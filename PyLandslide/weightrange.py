@@ -36,9 +36,11 @@ class WeightRangeEstimator(object):
             raise ValueError('targets_file has not been found in the JSON file')
         self.targets_file = os.path.join(os.getcwd(), loaded_file.pop('targets_file'))
 
-        if loaded_file.get('tree_depths_file') is None:
-            raise ValueError('tree_depths_file has not been found in the JSON file')
-        self.tree_depths_file = os.path.join(os.getcwd(), loaded_file.pop('tree_depths_file'))
+        if loaded_file.get('max_tree_depth') is None:
+            print('max tree depth has been set to 100. If you wish to change this default value, add max_tree_depth to the inputs provided in the JSON file')
+            self.max_tree_depth = 100
+        else:
+            self.max_tree_depth = loaded_file.pop('max_tree_depth')
 
         if loaded_file.get('number_trees') is None:
             print('number of tree has been set to 100. If you wish to change this default value, add number_trees to the inputs provided in the JSON file')
@@ -84,8 +86,7 @@ class WeightRangeEstimator(object):
     def calculate_weight_range(self):
         targets_df = self.load_data_from_csv(self.targets_file, index_column = 'id')
         features_df = self.load_data_from_csv(self.features_file, index_column = 'id')
-        tree_depths_df = self.load_data_from_csv(self.tree_depths_file, index_column = 'target')
-        
+
         #Cach target and feature names
         target_names = targets_df.columns
         feature_names = features_df.columns
@@ -101,23 +102,22 @@ class WeightRangeEstimator(object):
         for itera in range(int(self.number_of_iterations)):
             #Note: This randomly split the data in 80% train and 20% test data
             X_train, X_test, Y_train, Y_test = train_test_split(features_df, targets_df, test_size = self.size_testing_sample)
-            #Loop through targets
-            for t, targ in enumerate(target_names):
-                print('-------------------------------------')
-                print('Iteration number:',t+1+(itera*len(target_names)))
 
-                #create a RandomForestClassifier model
-                importances = self.feature_importance_model(targets=Y_train[targ], features=X_train, max_tree_depth=tree_depths_df.at[targ,"tree_depth"], n_estimators=self.number_trees, cores=self.cores)
+            print('-------------------------------------')
+            print('Iteration number:',1+itera)
 
-                metrics = self.overall_accuracy(importances[1],X_train,Y_train[targ],X_test,Y_test[targ])
+            #create a RandomForestClassifier model
+            importances = self.feature_importance_model(targets=Y_train[target_names[0]], features=X_train, max_tree_depth=self.max_tree_depth, n_estimators=self.number_trees, cores=self.cores)
 
-                #save the values of relative importance into the 'results' dataframe
-                if metrics[0] >= self.performance_cutoff and metrics[1] >= self.performance_cutoff:
-                    results.at[itera, "target"] = targ
-                    results.at[itera, "training_overall_accuracy"] = metrics[0]
-                    results.at[itera, "testing_overall_accuracy"] = metrics[1]
-                    for f, feat in enumerate (feature_names):
-                        results.at[itera, feat] = importances[0][f]
+            metrics = self.overall_accuracy(importances[1],X_train,Y_train[target_names[0]],X_test,Y_test[target_names[0]])
+
+            #save the values of relative importance into the 'results' dataframe
+            if metrics[0] >= self.performance_cutoff and metrics[1] >= self.performance_cutoff:
+                results.at[itera, "target"] = target_names[0]
+                results.at[itera, "training_overall_accuracy"] = metrics[0]
+                results.at[itera, "testing_overall_accuracy"] = metrics[1]
+                for f, feat in enumerate (feature_names):
+                    results.at[itera, feat] = importances[0][f]
 
         results.dropna(how='all').to_csv(self.output_file)
 
