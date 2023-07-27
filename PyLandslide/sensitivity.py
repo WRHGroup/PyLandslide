@@ -22,7 +22,9 @@ class SensitivityEstimator(object):
     def load_data_from_json(self, **kwargs):
         """Load data from a file
         """
-        data = os.path.join(os.getcwd(), self.json_file)
+        data = os.path.normpath(os.path.join(os.getcwd(), self.json_file))
+        self.json_file_directory = os.path.normpath(os.path.dirname(data))
+        
         if isinstance(data, str):
             logging.info('Loading data from file: "{}"'.format(data))
             with open(data, "r") as f:
@@ -38,9 +40,9 @@ class SensitivityEstimator(object):
 
         if loaded_file.get('output_directory') is None:
             print('output directory set to the cwd. If you wish to change this default value, add output_directory to the inputs provided in the JSON file')
-            self.output_directory = os.getcwd()
+            self.output_directory = os.path.normpath(self.json_file_directory)
         else:
-            self.output_directory = os.path.join(os.getcwd(), loaded_file.pop('output_directory'))
+            self.output_directory = os.path.normpath(os.path.join(self.json_file_directory, loaded_file.pop('output_directory')))
 
     def factor_data_preperation(self, factors):
         keys = []
@@ -51,7 +53,7 @@ class SensitivityEstimator(object):
         for f in factors:
             keys.append(("weight_"+f["name"]))
             names.append(f["name"])
-            files.append(f["file"])
+            files.append(os.path.normpath(os.path.join(self.json_file_directory, f["file"])))
             weight_upper_bounds.append(f["weight_upper_bound"])
             weight_lower_bounds.append(f["weight_lower_bound"])
         return keys, names, files, weight_lower_bounds, weight_upper_bounds

@@ -1,33 +1,33 @@
 {
-  "output_directory":"tests/files/outputs",
+  "output_directory":"outputs",
   "factors":[
     {
       "name":"landcover",
-      "file":"tests/files/sensitivity_data/landcover_scores.tif",
+      "file":"sensitivity_data/landcover_scores.tif",
       "weight_upper_bound":0.223274502320906,
       "weight_lower_bound":0.01462027356682
     },
     {
       "name":"lithology",
-      "file":"tests/files/sensitivity_data/lithology_scores.tif",
+      "file":"sensitivity_data/lithology_scores.tif",
       "weight_upper_bound":0.223274502320906,
       "weight_lower_bound":0.01462027356682
     },
     {
       "name":"rainfall",
-      "file":"tests/files/sensitivity_data/rainfall_scores.tif",
+      "file":"sensitivity_data/rainfall_scores.tif",
       "weight_upper_bound":0.282342138738211,
       "weight_lower_bound":0.073089214251353
     },
     {
       "name":"roads",
-      "file":"tests/files/sensitivity_data/roads_scores.tif",
+      "file":"sensitivity_data/roads_scores.tif",
       "weight_upper_bound":0.461351273573481,
       "weight_lower_bound":0.242946699803297
     },
     {
       "name":"slope",
-      "file":"tests/files/sensitivity_data/slope_scores.tif",
+      "file":"sensitivity_data/slope_scores.tif",
       "weight_upper_bound":0.319207900042301,
       "weight_lower_bound":0.105472085227165
     }
