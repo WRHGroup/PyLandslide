@@ -35,7 +35,7 @@
   "susceptibility_classes":[
     {
       "name":"very low",
-      "class_lower_bound":0,
+      "class_lower_bound":0.0001,
       "class_upper_bound":19.9999
     },
     {
