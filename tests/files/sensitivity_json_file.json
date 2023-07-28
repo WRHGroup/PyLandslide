@@ -15,7 +15,7 @@
     },
     {
       "name":"rainfall",
-      "file":"sensitivity_data/rainfall_scores.tif",
+      "file":"sensitivity_data/rainfall_ACCESS-ESM1-5_ssp126-scores.tif",
       "weight_upper_bound":0.282342138738211,
       "weight_lower_bound":0.073089214251353
     },
