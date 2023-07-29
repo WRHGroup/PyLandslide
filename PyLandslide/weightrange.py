@@ -14,7 +14,7 @@ class WeightRangeEstimator(object):
         self.json_file = json_file
 
     def load_data_from_json(self, **kwargs):
-        """Load data from a file
+        """Load data from a file -
         """
         data = os.path.normpath(os.path.join(os.getcwd(), self.json_file))
         self.json_file_directory = os.path.normpath(os.path.dirname(data))
