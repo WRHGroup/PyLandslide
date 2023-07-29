@@ -5,6 +5,7 @@ import sys
 import logging
 from PyLandslide.weightrange import *
 from PyLandslide.sensitivity import *
+from PyLandslide.weightrange_preparation import *
 
 logger = logging.getLogger(__name__)
 
@@ -13,18 +14,17 @@ logger = logging.getLogger(__name__)
 def cli():
     pass
 
+@cli.command(name='mldata')
+@click.option('-f', '--file-name', type=str, default="weight_range_data_preparation.json")
+def mldata(file_name):
+    logger.info('Starting the process.')
+    WeightRangePreparationModel = WeightRangePreparation(json_file=file_name)
+    WeightRangePreparationModel.setup()
+    WeightRangePreparationModel.extract()
 
 @cli.command(name='weightrange')
 @click.option('-f', '--file-name', type=str, default="weight_range_json_file.json")
 def weightrange(file_name):
-    logger.info('Starting the process.')
-    WeightRangeModel = WeightRangeEstimator(json_file=file_name)
-    WeightRangeModel.setup()
-    WeightRangeModel.calculate_weight_range()
-
-@cli.command(name='mldata')
-@click.option('-f', '--file-name', type=str, default="weight_range_data_preparation.json")
-def mldata(file_name):
     logger.info('Starting the process.')
     WeightRangeModel = WeightRangeEstimator(json_file=file_name)
     WeightRangeModel.setup()

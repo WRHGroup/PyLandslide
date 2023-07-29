@@ -1,7 +1,7 @@
 {
   "output_directory":"outputs",
-  "landslide_locations":"feature_data/landslide_locations.shp",
-  "nonlandslide_locations":"feature_data/nonlandslide_locations.shp",
+  "landslide_locations":"shp_data/landslide_locations.shp",
+  "nonlandslide_locations":"shp_data/nonlandslide_locations.shp",
   "factors":[
     {
       "name":"landcover",
