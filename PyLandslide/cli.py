@@ -22,6 +22,14 @@ def weightrange(file_name):
     WeightRangeModel.setup()
     WeightRangeModel.calculate_weight_range()
 
+@cli.command(name='mldata')
+@click.option('-f', '--file-name', type=str, default="weight_range_data_preparation.json")
+def mldata(file_name):
+    logger.info('Starting the process.')
+    WeightRangeModel = WeightRangeEstimator(json_file=file_name)
+    WeightRangeModel.setup()
+    WeightRangeModel.calculate_weight_range()
+
 @cli.command(name='sensitivity')
 @click.option('-f', '--file-name', type=str, default="sensitivity_json_file.json")
 @click.option('-t', '--trials', type=int, default=10)
