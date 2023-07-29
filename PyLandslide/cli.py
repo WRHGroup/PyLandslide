@@ -15,7 +15,7 @@ def cli():
     pass
 
 @cli.command(name='mldata')
-@click.option('-f', '--file-name', type=str, default="weight_range_data_preparation.json")
+@click.option('-f', '--file-name', type=str, default="1_weight_range_data_preparation.json")
 def mldata(file_name):
     logger.info('Starting the process.')
     WeightRangePreparationModel = WeightRangePreparation(json_file=file_name)
@@ -23,7 +23,7 @@ def mldata(file_name):
     WeightRangePreparationModel.extract()
 
 @cli.command(name='weightrange')
-@click.option('-f', '--file-name', type=str, default="weight_range_json_file.json")
+@click.option('-f', '--file-name', type=str, default="2_weight_range_json_file.json")
 def weightrange(file_name):
     logger.info('Starting the process.')
     WeightRangeModel = WeightRangeEstimator(json_file=file_name)
@@ -31,7 +31,7 @@ def weightrange(file_name):
     WeightRangeModel.calculate_weight_range()
 
 @cli.command(name='sensitivity')
-@click.option('-f', '--file-name', type=str, default="sensitivity_json_file_his_rainfall.json")
+@click.option('-f', '--file-name', type=str, default="3_sensitivity_json_file_his_rainfall.json")
 @click.option('-t', '--trials', type=int, default=10)
 def sensitivity(file_name, trials):
     logger.info('Starting the process.')
@@ -40,7 +40,7 @@ def sensitivity(file_name, trials):
     SensitivityModel.execute()
 
 @cli.command(name='generate')
-@click.option('-f', '--file-name', type=str, default="sensitivity_json_file.json")
+@click.option('-f', '--file-name', type=str, default="3_sensitivity_json_file_his_rainfall.json")
 @click.option('-c', '--csv-sensitivity', type=str, default="sensitivity_results.csv")
 @click.option('-i', '--index', type=int, default=1)
 def generate(file_name, csv_sensitivity, index):
@@ -50,7 +50,7 @@ def generate(file_name, csv_sensitivity, index):
     SensitivityModel.generate(index = index, csv_sensitivity=csv_sensitivity)
 
 @cli.command(name='compare')
-@click.option('-f', '--file-name', type=str, default="sensitivity_json_file.json")
+@click.option('-f', '--file-name', type=str, default="3_sensitivity_json_file_his_rainfall.json")
 @click.option('-l1', '--layer1', type=str, default="susceptibility_0.tif")
 @click.option('-l2', '--layer2', type=str, default="susceptibility_1.tif")
 def compare(file_name, layer1, layer2):

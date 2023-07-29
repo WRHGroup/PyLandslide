@@ -1,35 +1,26 @@
 {
   "output_directory":"outputs",
+  "weight_csv_sensitivity_file":"outputs/weight_ranges.csv",
   "factors":[
     {
       "name":"landcover",
-      "file":"raster_data/landcover_scores.tif",
-      "weight_upper_bound":0.152051754895568,
-      "weight_lower_bound":0.126263396629938
+      "file":"raster_data/landcover_scores.tif"
     },
     {
       "name":"lithology",
-      "file":"raster_data/lithology_scores.tif",
-      "weight_upper_bound":0.0731587372431331,
-      "weight_lower_bound":0.0670190103742642
+      "file":"raster_data/lithology_scores.tif"
     },
     {
       "name":"rainfall",
-      "file":"raster_data/rainfall_historical_chirps_scores.tif",
-      "weight_upper_bound":0.0716352682370072,
-      "weight_lower_bound":0.0643914849023436
+      "file":"raster_data/rainfall_historical_chirps_scores.tif"
     },
     {
       "name":"roads",
-      "file":"raster_data/roads_scores.tif",
-      "weight_upper_bound":0.511453684848213,
-      "weight_lower_bound":0.483178975429757
+      "file":"raster_data/roads_scores.tif"
     },
     {
       "name":"slope",
-      "file":"raster_data/slope_scores.tif",
-      "weight_upper_bound":0.191700554776077,
-      "weight_lower_bound":0.181189122533794
+      "file":"raster_data/slope_scores.tif"
     }
   ],
   "susceptibility_classes":[

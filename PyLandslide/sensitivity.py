@@ -44,19 +44,19 @@ class SensitivityEstimator(object):
         else:
             self.output_directory = os.path.normpath(os.path.join(self.json_file_directory, loaded_file.pop('output_directory')))
 
+        if loaded_file.get('weight_csv_sensitivity_file') is None:
+            raise ValueError('weight_csv_sensitivity_file has not been found in the JSON file')
+        self.weight_csv_sensitivity_file = os.path.normpath(os.path.join(self.json_file_directory, loaded_file.pop('weight_csv_sensitivity_file')))
+
     def factor_data_preperation(self, factors):
         keys = []
         names = []
         files = []
-        weight_upper_bounds = []
-        weight_lower_bounds = []
         for f in factors:
             keys.append(("weight_"+f["name"]))
             names.append(f["name"])
             files.append(os.path.normpath(os.path.join(self.json_file_directory, f["file"])))
-            weight_upper_bounds.append(f["weight_upper_bound"])
-            weight_lower_bounds.append(f["weight_lower_bound"])
-        return keys, names, files, weight_lower_bounds, weight_upper_bounds
+        return keys, names, files
 
     def susceptibility_classes_data_preperation(self, susceptibility_classes):
         names = []
@@ -67,13 +67,6 @@ class SensitivityEstimator(object):
             class_upper_bounds.append(s["class_upper_bound"])
             class_lower_bounds.append(s["class_lower_bound"])
         return names, class_lower_bounds, class_upper_bounds
-
-    def check_weight_upper_and_lower_bounds(self, upper, lower):
-        if max(upper)>1 or min(upper)<0 or max(lower)>1 or min(lower)<0:
-            raise ValueError('weight_upper_bound and weight_lower_bound must be <= 1 and >= 0')
-        for v,vv in enumerate(upper):
-            if lower[v]>= upper[v]:
-                raise ValueError('weight_upper_bound for each factor must be greater than weight_lower_bound')
 
     def check_class_upper_and_lower_bounds(self, upper, lower):
         for v,vv in enumerate(upper):
@@ -89,28 +82,18 @@ class SensitivityEstimator(object):
             results_dic[n]=[]
         return results_dic
 
-    def generate_random_weights(self):
-        temp_list1 = []
+    def generate_random_weights(self, input_pd_table, data_length):
         random_weights = []
-        for i, ii in enumerate(self.factor_weight_keys):
-            temp_list1.append(random.uniform(self.factor_weight_lower_bounds[i], self.factor_weight_upper_bounds[i]))
-        for m, k in enumerate(self.factor_weight_keys):
-            random_weights.append(round(temp_list1[m]/sum(temp_list1),3))
+        random_ix = random.randint(0, (data_length-1))
+        for nx, name in enumerate(self.factor_names):
+            random_weights.append(input_pd_table.at[random_ix,name])
         return random_weights
 
-    def check_weight_ranges(self, weights):
-        flag_list = []
-        for w, ww in enumerate(weights):
-            if ww >= self.factor_weight_lower_bounds[w] and ww <= self.factor_weight_upper_bounds[w]:
-                flag_list.append(0)
-            else:
-                flag_list.append(1)
-        
-        if max(flag_list)==0:
-            print("Weights generated")
-            return True
-        else:
-            return False
+    def load_weight_csv_sensitivity_file(self, sens_csv):
+        csv_file = pd.read_csv(sens_csv)
+        csv_file.index.name = 'id'
+        number_of_rows = len(csv_file.index)
+        return csv_file, number_of_rows
 
     def overlay_factors(self, factor_weights):
         print("Overlaying factors...")
@@ -202,10 +185,6 @@ class SensitivityEstimator(object):
         self.factor_weight_keys = factor_data[0]
         self.factor_names = factor_data[1]
         self.factor_files = factor_data[2]
-        self.factor_weight_lower_bounds = factor_data[3]
-        self.factor_weight_upper_bounds = factor_data[4]
-
-        self.check_weight_upper_and_lower_bounds(upper=self.factor_weight_upper_bounds,lower=self.factor_weight_lower_bounds)
 
         susceptibility_classes_data = self.susceptibility_classes_data_preperation(susceptibility_classes=self.susceptibility_classes)
         self.susceptibility_classes_names = susceptibility_classes_data[0]
@@ -216,22 +195,26 @@ class SensitivityEstimator(object):
 
         #create results dic
         final_results_dic = self.create_results_dict()
+        weight_csv_sensitivity_data = self.load_weight_csv_sensitivity_file(self.weight_csv_sensitivity_file)
+        sens_table_pd = weight_csv_sensitivity_data[0]
+        availabel_items = weight_csv_sensitivity_data[1]
+        if (availabel_items<self.trials):
+            print("Warning: the number of trials is set to", availabel_items, ", as this is the maximum number of data available in", self.weight_csv_sensitivity_file)
 
         successful_trials = 0
         while successful_trials < self.trials:
             t0 = time.time()
-            weight_inputs = self.generate_random_weights()
-            if self.check_weight_ranges(weights=weight_inputs):
-                print("============================================ starting trial "+str(successful_trials+1))
-                susceptability_assessment = self.overlay_factors(factor_weights=weight_inputs)
-                for sc, susceptibility_class in enumerate(self.susceptibility_classes_names):
-                    final_results_dic[susceptibility_class].append(susceptability_assessment[sc])
-                for wc, factor_weight_key in enumerate(self.factor_weight_keys):
-                    final_results_dic[factor_weight_key].append(weight_inputs[wc])
+            weight_inputs = self.generate_random_weights(sens_table_pd, availabel_items)
+            print("============================================ starting trial "+str(successful_trials+1))
+            susceptability_assessment = self.overlay_factors(factor_weights=weight_inputs)
+            for sc, susceptibility_class in enumerate(self.susceptibility_classes_names):
+                final_results_dic[susceptibility_class].append(susceptability_assessment[sc])
+            for wc, factor_weight_key in enumerate(self.factor_weight_keys):
+                final_results_dic[factor_weight_key].append(weight_inputs[wc])
 
-                percent = (successful_trials+1)/self.trials*100
-                print("time taken in the trial", round((time.time()-t0),0), "seconds|progress: (trial =",successful_trials+1,") (percentage =", round(percent,2), "%)")
-                successful_trials += 1  
+            percent = (successful_trials+1)/self.trials*100
+            print("time taken in the trial", round((time.time()-t0),0), "seconds|progress: (trial =",successful_trials+1,") (percentage =", round(percent,2), "%)")
+            successful_trials += 1  
 
             #write the results
             final_result_pd = pd.DataFrame.from_dict(final_results_dic)
@@ -242,7 +225,7 @@ class SensitivityEstimator(object):
         os.remove(os.path.join(self.output_directory, 'temp_lss.tif'))
 
     def setup(self):
-        print("Setting up WeightRangeEstimator...")
+        print("Setting up SensitivityEstimator...")
         self.load_data_from_json()
 
     def generate(self, index, csv_sensitivity):
