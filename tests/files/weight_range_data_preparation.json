@@ -1,0 +1,27 @@
+{
+  "output_directory":"outputs",
+  "landslide_locations":"shp_data/landslide_locations.shp",
+  "nonlandslide_locations":"shp_data/nonlandslide_locations.shp",
+  "factors":[
+    {
+      "name":"landcover",
+      "file":"raster_data/landcover_scores.tif"
+    },
+    {
+      "name":"lithology",
+      "file":"raster_data/lithology_scores.tif"
+    },
+    {
+      "name":"rainfall",
+      "file":"raster_data/rainfall_historical_chirps_scores.tif"
+    },
+    {
+      "name":"roads",
+      "file":"raster_data/roads_scores.tif"
+    },
+    {
+      "name":"slope",
+      "file":"raster_data/slope_scores.tif"
+    }
+  ]
+}

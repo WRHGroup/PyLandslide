@@ -1,17 +1,11 @@
 #loading neccessery packages
 import os
-import click
 import json
-import numpy as np
 import pandas as pd
-import time
-import matplotlib.pyplot as plt
-from osgeo import gdal
-import random
 import logging
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import train_test_split
-from sklearn.metrics import r2_score, mean_absolute_error, max_error, mean_squared_error, confusion_matrix
+from sklearn.metrics import confusion_matrix
 logger = logging.getLogger(__name__)
 
 class WeightRangeEstimator(object):
@@ -22,7 +16,9 @@ class WeightRangeEstimator(object):
     def load_data_from_json(self, **kwargs):
         """Load data from a file
         """
-        data = os.path.join(os.getcwd(), self.json_file)
+        data = os.path.normpath(os.path.join(os.getcwd(), self.json_file))
+        self.json_file_directory = os.path.normpath(os.path.dirname(data))
+
         if isinstance(data, str):
             logging.info('Loading data from file: "{}"'.format(data))
             with open(data, "r") as f:
@@ -30,12 +26,12 @@ class WeightRangeEstimator(object):
 
         if loaded_file.get('features_file') is None:
             raise ValueError('features_file has not been found in the JSON file')
-        self.features_file = os.path.join(os.getcwd(), loaded_file.pop('features_file'))
+        self.features_file = os.path.normpath(os.path.join(self.json_file_directory, loaded_file.pop('features_file')))
 
         if loaded_file.get('targets_file') is None:
             raise ValueError('targets_file has not been found in the JSON file')
-        self.targets_file = os.path.join(os.getcwd(), loaded_file.pop('targets_file'))
-
+        self.targets_file = os.path.normpath(os.path.join(self.json_file_directory, loaded_file.pop('targets_file')))
+            
         if loaded_file.get('max_tree_depth') is None:
             print('max tree depth has been set to 100. If you wish to change this default value, add max_tree_depth to the inputs provided in the JSON file')
             self.max_tree_depth = 100
@@ -49,10 +45,10 @@ class WeightRangeEstimator(object):
             self.number_trees = loaded_file.pop('number_trees')
 
         if loaded_file.get('output_file') is None:
-            print('output file set to weight_ranges.csv in the cwd. If you wish to change this default value, add number_trees to the inputs provided in the JSON file')
-            self.output_file = os.path.join(os.getcwd(), 'weight_ranges.csv')
+            print('output file set to weight_ranges.csv in the cwd. If you wish to change this default value, add output_file to the inputs provided in the JSON file')
+            self.output_file = os.path.normpath(os.path.join(self.json_file_directory, 'weight_ranges.csv'))
         else:
-            self.output_file = os.path.join(os.getcwd(), loaded_file.pop('output_file'))
+            self.output_file = os.path.normpath(os.path.join(self.json_file_directory, loaded_file.pop('output_file')))
 
         if loaded_file.get('size_testing_sample') is None:
             print('size of testing sample has been set to 0.2. If you wish to change this default value, add size_testing_sample to the inputs provided in the JSON file')
