@@ -31,7 +31,7 @@ def weightrange(file_name):
     WeightRangeModel.calculate_weight_range()
 
 @cli.command(name='sensitivity')
-@click.option('-f', '--file-name', type=str, default="sensitivity_json_file.json")
+@click.option('-f', '--file-name', type=str, default="sensitivity_json_file_his_rainfall.json")
 @click.option('-t', '--trials', type=int, default=10)
 def sensitivity(file_name, trials):
     logger.info('Starting the process.')
