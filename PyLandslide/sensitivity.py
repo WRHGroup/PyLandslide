@@ -124,7 +124,7 @@ class SensitivityEstimator(object):
                 calc_add = "+("+alphabets[w]+"*"+str(weight_value)+")"
                 calc_formula+=calc_add 
 
-        full_calculation_command = "gdal_calc.py --quiet --overwrite --extent=union --outfile "+self.output_directory+"/temp_lss.tif"
+        full_calculation_command = 'gdal_calc.py --co="COMPRESS=LZW" --quiet --overwrite --extent=union --outfile '+self.output_directory+"/temp_lss.tif"
         for f, factor_file_dir in enumerate(self.factor_files):
             cmd_add = " -"+ alphabets[f] + " "+ factor_file_dir
             full_calculation_command+=cmd_add 

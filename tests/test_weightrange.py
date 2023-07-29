@@ -13,9 +13,9 @@ def test_json_loading():
     WeightRangeModel = WeightRangeEstimator('tests/files/weight_range_json_file.json')
     WeightRangeModel.setup()
 
-    features_file_path = os.path.normpath(os.path.join(os.getcwd(),'tests/files/ml_data/features.csv'))
+    features_file_path = os.path.normpath(os.path.join(os.getcwd(),'tests/files/csv_data/features.csv'))
     assert(WeightRangeModel.features_file == features_file_path)
-    targets_file_path = os.path.normpath(os.path.join(os.getcwd(),'tests/files/ml_data/targets.csv'))
+    targets_file_path = os.path.normpath(os.path.join(os.getcwd(),'tests/files/csv_data/targets.csv'))
     assert(WeightRangeModel.targets_file == targets_file_path)
 
 def test_csv_df_loading():
