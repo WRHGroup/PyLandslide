@@ -1,0 +1,53 @@
+{
+  "output_directory":"outputs",
+  "weight_csv_sensitivity_file":"outputs/weight_ranges.csv",
+  "factors":[
+    {
+      "name":"landcover",
+      "file":"raster_data/landcover_scores.tif"
+    },
+    {
+      "name":"lithology",
+      "file":"raster_data/lithology_scores.tif"
+    },
+    {
+      "name":"rainfall",
+      "file":"raster_data/rainfall_UKESM1-0-LL_ssp126_scores.tif"
+    },
+    {
+      "name":"roads",
+      "file":"raster_data/roads_scores.tif"
+    },
+    {
+      "name":"slope",
+      "file":"raster_data/slope_scores.tif"
+    }
+  ],
+  "susceptibility_classes":[
+    {
+      "name":"very low",
+      "class_lower_bound":0.0001,
+      "class_upper_bound":19.9999
+    },
+    {
+      "name":"low",
+      "class_lower_bound":20,
+      "class_upper_bound":39.9999
+    },
+    {
+      "name":"moderate",
+      "class_lower_bound":40,
+      "class_upper_bound":59.9999
+    },
+    {
+      "name":"high",
+      "class_lower_bound":60,
+      "class_upper_bound":79.9999
+    },
+    {
+      "name":"extremly high",
+      "class_lower_bound":80,
+      "class_upper_bound":1009
+    }
+  ]
+}
