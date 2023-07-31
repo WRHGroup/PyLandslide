@@ -12,7 +12,7 @@
     },
     {
       "name":"rainfall",
-      "file":"raster_data/rainfall_UKESM1-0-LL_ssp245_scores.tif"
+      "file":"raster_data/rainfall_UKESM1-0-LL_ssp585_scores.tif"
     },
     {
       "name":"roads",
