@@ -1,4 +1,4 @@
-# landlev
+# Pylandslide
 
 
 ## Installation
@@ -9,7 +9,7 @@
 4. conda install click
 5. conda install numpy
 6. conda install pandas
-7. pip install sklearn
+7. pip install scikit-learn
 8. conda install gdal=3.0
 
 Install landlev
