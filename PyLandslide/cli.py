@@ -5,7 +5,7 @@ import sys
 import logging
 from PyLandslide.weightrange import *
 from PyLandslide.sensitivity import *
-from PyLandslide.weightrange_preparation import *
+from PyLandslide.data_preparation import *
 
 logger = logging.getLogger(__name__)
 
@@ -18,7 +18,7 @@ def cli():
 @click.option('-f', '--file-name', type=str, default="1_weight_range_data_preparation.json")
 def mldata(file_name):
     logger.info('Starting the process.')
-    WeightRangePreparationModel = WeightRangePreparation(json_file=file_name)
+    WeightRangePreparationModel = DataPreparation(json_file=file_name)
     WeightRangePreparationModel.setup()
     WeightRangePreparationModel.extract()
 
@@ -29,6 +29,13 @@ def weightrange(file_name):
     WeightRangeModel = WeightRangeEstimator(json_file=file_name)
     WeightRangeModel.setup()
     WeightRangeModel.calculate_weight_range()
+
+@cli.command(name='coregister')
+@click.option('-f', '--folder-name', type=str, default="raster_data")
+def coregister(folder_name):
+    logger.info('Starting the process.')
+    CoRegisterModel = DataPreparation(folder_name=folder_name)
+    CoRegisterModel.align()
 
 @cli.command(name='sensitivity')
 @click.option('-f', '--file-name', type=str, default="3_sensitivity_json_file_his_rainfall.json")

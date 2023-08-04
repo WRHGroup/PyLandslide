@@ -4,14 +4,15 @@ import json
 import pandas as pd
 import numpy as np
 import logging
-import rasterio
 import geopandas as gpd
+from rasterio.warp import reproject, Resampling, calculate_default_transform
+import rasterio
 
-
-class WeightRangePreparation(object):
-    def __init__(self, json_file, *args, **kwargs):
+class DataPreparation(object):
+    def __init__(self, json_file=None, folder_name=None, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.json_file = json_file
+        self.folder_name = folder_name
 
     def load_data_from_json(self, **kwargs):
         """Load data from a file
@@ -124,3 +125,73 @@ class WeightRangePreparation(object):
         targets_df1.to_csv(os.path.join(self.output_directory,'targets.csv'))
 
         print("Completed.")
+
+    def align(self):
+        dir_list = os.listdir(os.path.join(os.getcwd(), self.folder_name))
+        raster_files = []
+        outfiles = []
+        for f in dir_list:
+            if f.endswith('.tif') or f.endswith('.tiff'):
+                raster_files.append(os.path.join(os.getcwd(), self.folder_name, f))
+                outfiles.append(os.path.join(os.getcwd(), self.folder_name, "alinged_rasters", f))
+
+        if not os.path.exists(os.path.join(os.getcwd(), self.folder_name, "alinged_rasters")):
+            os.makedirs(os.path.join(os.getcwd(), self.folder_name, "alinged_rasters"))
+            
+        raster_width = []
+        raster_height = []
+        bound_left = []
+        bound_bottom = []
+        bound_right = []
+        bound_top = []
+        coordinate_system = []
+        for rff in raster_files:
+            with rasterio.open(rff) as rf:
+                raster_width.append(rf.width)
+                raster_height.append(rf.height)
+                bound_left.append(rf.bounds[0])
+                bound_bottom.append(rf.bounds[1])
+                bound_right.append(rf.bounds[2])
+                bound_top.append(rf.bounds[3])
+                coordinate_system.append(rf.crs)
+
+        dst_transform = []
+        dst_width = []
+        dst_height = []
+        for ix, rd in enumerate(raster_files):
+            dst_transform_temp, dst_width_temp, dst_height_temp = calculate_default_transform(
+                src_crs=coordinate_system[ix],
+                dst_crs=coordinate_system[0], 
+                width=min(raster_width),
+                height=min(raster_height),
+                left=max(bound_left),
+                bottom=max(bound_bottom),
+                right=min(bound_right),
+                top=min(bound_top)
+            )
+            dst_transform.append(dst_transform_temp)
+            dst_width.append(dst_width_temp)
+            dst_height.append(dst_height_temp)
+
+        for ix, rff in enumerate(raster_files):
+            with rasterio.open(rff) as rf: 
+                dst_kwargs = rf.meta.copy()
+                dst_kwargs.update({"crs": coordinate_system[0],
+                                "transform": dst_transform[ix],
+                                "width": dst_width[ix],
+                                "height": dst_height[ix],
+                                "dtype": 'uint8',
+                                'compress': 'lzw',
+                                "nodata": 255})
+
+                with rasterio.open(outfiles[ix], "w", **dst_kwargs) as dst:
+                    print(outfiles[ix])
+                    for i in range(1, rf.count + 1):
+                        reproject(
+                            source=rasterio.band(rf, i),
+                            destination=rasterio.band(dst, i),
+                            src_transform=rf.transform,
+                            src_crs=rf.crs,
+                            dst_transform=dst_transform,
+                            dst_crs=coordinate_system[0],
+                            resampling=Resampling.nearest)
