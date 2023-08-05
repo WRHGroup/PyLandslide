@@ -126,18 +126,41 @@ class DataPreparation(object):
 
         print("Completed.")
 
-    def align(self):
+    def adjust(self):
         dir_list = os.listdir(os.path.join(os.getcwd(), self.folder_name))
         raster_files = []
         outfiles = []
         for f in dir_list:
             if f.endswith('.tif') or f.endswith('.tiff'):
                 raster_files.append(os.path.join(os.getcwd(), self.folder_name, f))
+                outfiles.append(os.path.join(os.getcwd(), self.folder_name, "uint8", f))
+
+        if not os.path.exists(os.path.join(os.getcwd(), self.folder_name, "uint8")):
+            os.makedirs(os.path.join(os.getcwd(), self.folder_name, "uint8"))
+
+        for rx, rff in enumerate(raster_files):
+            with rasterio.open(rff) as rf:
+                ds = rf.read(1)
+                masked_ds = np.ma.masked_where(ds == rf.nodata, ds)
+                profile = rf.profile
+                profile['nodata'] = 255
+                profile['dtype'] = 'uint8'
+                print(rff)
+                with rasterio.open(outfiles[rx], 'w', **profile) as dst:
+                    dst.write(masked_ds, 1)
+
+    def align(self):
+        dir_list = os.listdir(os.path.join(os.getcwd(), self.folder_name))
+        raster_files = []
+        outfiles = []
+        for f in dir_list:
+            if f.endswith('.tif') or f.endswith('.tiff'):
+                raster_files.append(os.path.join(os.getcwd(), self.folder_name, "uint8", f))
                 outfiles.append(os.path.join(os.getcwd(), self.folder_name, "alinged_rasters", f))
 
         if not os.path.exists(os.path.join(os.getcwd(), self.folder_name, "alinged_rasters")):
             os.makedirs(os.path.join(os.getcwd(), self.folder_name, "alinged_rasters"))
-            
+
         raster_width = []
         raster_height = []
         bound_left = []
@@ -161,7 +184,7 @@ class DataPreparation(object):
         for ix, rd in enumerate(raster_files):
             dst_transform_temp, dst_width_temp, dst_height_temp = calculate_default_transform(
                 src_crs=coordinate_system[ix],
-                dst_crs=coordinate_system[0], 
+                dst_crs=coordinate_system[1], 
                 width=min(raster_width),
                 height=min(raster_height),
                 left=max(bound_left),
@@ -175,14 +198,15 @@ class DataPreparation(object):
 
         for ix, rff in enumerate(raster_files):
             with rasterio.open(rff) as rf: 
+                ddd = rf.read(1)
                 dst_kwargs = rf.meta.copy()
-                dst_kwargs.update({"crs": coordinate_system[0],
+                dst_kwargs.update({"crs": coordinate_system[1],
                                 "transform": dst_transform[ix],
                                 "width": dst_width[ix],
                                 "height": dst_height[ix],
                                 "dtype": 'uint8',
-                                'compress': 'lzw',
-                                "nodata": 255})
+                                "nodata": rf.nodata,
+                                'compress': 'lzw'})
 
                 with rasterio.open(outfiles[ix], "w", **dst_kwargs) as dst:
                     print(outfiles[ix])
@@ -192,6 +216,7 @@ class DataPreparation(object):
                             destination=rasterio.band(dst, i),
                             src_transform=rf.transform,
                             src_crs=rf.crs,
-                            dst_transform=dst_transform,
-                            dst_crs=coordinate_system[0],
+                            dst_transform=dst_transform[1],
+                            dst_crs=coordinate_system[1],
+                            num_threads=4,
                             resampling=Resampling.nearest)
