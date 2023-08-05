@@ -3,12 +3,12 @@ import os
 import json
 import numpy as np
 import pandas as pd
-from osgeo import gdal
 import logging
 import random
 import copy
 import time
 import string  
+import rasterio
 from datetime import datetime
 logger = logging.getLogger(__name__)
 
@@ -52,11 +52,18 @@ class SensitivityEstimator(object):
         keys = []
         names = []
         files = []
+        profiles = []
+        raster_sets = []
         for f in factors:
             keys.append(("weight_"+f["name"]))
             names.append(f["name"])
             files.append(os.path.normpath(os.path.join(self.json_file_directory, f["file"])))
-        return keys, names, files
+            with rasterio.open(os.path.normpath(os.path.join(self.json_file_directory, f["file"]))) as src:
+                profiles.append(src.profile)
+                band1 = src.read(1)
+                masked_data = np.ma.masked_where(band1 == src.nodata, band1)
+                raster_sets.append(masked_data)
+        return keys, names, files, profiles, raster_sets
 
     def susceptibility_classes_data_preperation(self, susceptibility_classes):
         names = []
@@ -72,7 +79,6 @@ class SensitivityEstimator(object):
         for v,vv in enumerate(upper):
             if lower[v]>= upper[v]:
                 raise ValueError('class_upper_bound for each factor must be greater than class_lower_bound')
-
 
     def create_results_dict(self):
         results_dic = {}
@@ -97,75 +103,26 @@ class SensitivityEstimator(object):
 
     def overlay_factors(self, factor_weights):
         print("Overlaying factors...")
-        alphabets = list(string.ascii_uppercase)
-        calc_formula=""
-        for w, weight_value in enumerate(factor_weights):
-            if w == 0:
-                calc_add = "("+alphabets[w]+"*"+str(weight_value)+")"
-                calc_formula+=calc_add
+        for rx, raster in enumerate(self.raster_sets):
+            if rx==0:
+                overlayed = raster * factor_weights[rx]
             else:
-                calc_add = "+("+alphabets[w]+"*"+str(weight_value)+")"
-                calc_formula+=calc_add 
-
-        full_calculation_command = 'gdal_calc.py --co="COMPRESS=LZW" --quiet --overwrite --extent=union --outfile '+self.output_directory+"/temp_lss.tif"
-        for f, factor_file_dir in enumerate(self.factor_files):
-            cmd_add = " -"+ alphabets[f] + " "+ factor_file_dir
-            full_calculation_command+=cmd_add 
-
-        full_calculation_command+= (" --calc="+calc_formula)
-        os.system(full_calculation_command)
-
-        lss_dataset = self.load_dataset(file_path=os.path.join(self.output_directory,"temp_lss.tif"))
-        lss_np = self.raster_to_numpy(raster_dataset=lss_dataset, no_data_value=lss_dataset.GetRasterBand(1).GetNoDataValue())
-
-        susceptibility_class_pixels = self.number_of_pixels_in_susceptibility_classes(susceptibility_raster=lss_np)
-
+                overlayed += raster * factor_weights[rx]
+        susceptibility_class_pixels = self.number_of_pixels_in_susceptibility_classes(susceptibility_raster=overlayed)
         return susceptibility_class_pixels
 
     def generate_layer(self, factor_weights, suffex):
         print("Generating layer by overlaying factors...")
-        alphabets = list(string.ascii_uppercase)
-        calc_formula=""
-        for w, weight_value in enumerate(factor_weights):
-            if w == 0:
-                calc_add = "("+alphabets[w]+"*"+str(weight_value)+")"
-                calc_formula+=calc_add
+        sum_max_weight = 0
+        for rx, raster in enumerate(self.raster_sets):
+            sum_max_weight += np.max(raster)
+            if rx==0:
+                overlayed = raster * factor_weights[rx]
             else:
-                calc_add = "+("+alphabets[w]+"*"+str(weight_value)+")"
-                calc_formula+=calc_add 
-
-        full_calculation_command = "gdal_calc.py --quiet --overwrite --extent=union --outfile "+self.output_directory+"/susceptibility_"+str(suffex)+".tif"
-        for f, factor_file_dir in enumerate(self.factor_files):
-            cmd_add = " -"+ alphabets[f] + " "+ factor_file_dir
-            full_calculation_command+=cmd_add 
-
-        full_calculation_command+= (" --calc="+calc_formula)
-        os.system(full_calculation_command)
-
-    def raster_from_numpy(self, numpy_array, projection, geo_trans, output_file, NoDataValue=-9999, data_type=gdal.GDT_Int16):
-        driver = gdal.GetDriverByName("GTiff")
-        driver.Register()
-        outds = driver.Create(output_file, xsize = numpy_array.shape[1],
-                            ysize = numpy_array.shape[0], bands = 1, 
-                            eType = data_type)
-        outds.SetGeoTransform(geo_trans)
-        outds.SetProjection(projection)
-        outband = outds.GetRasterBand(1)
-        outband.WriteArray(numpy_array)
-        outband.SetNoDataValue(NoDataValue)
-        outband.FlushCache()
-
-    def load_dataset(self, file_path):
-        print("Loading a locally saved raster file")
-        path = os.path.join(os.getcwd(), file_path)
-        raster_dataset = gdal.Open(path)
-        return raster_dataset
-
-    def raster_to_numpy(self, raster_dataset, no_data_value, no_data_value_repalcement=-9999, pixel_type=int):
-        print("Converting raster file to numpy array")
-        raster_numpy = np.array(raster_dataset.GetRasterBand(1).ReadAsArray()).astype(pixel_type)
-        raster_numpy[raster_numpy==no_data_value]=no_data_value_repalcement
-        return raster_numpy
+                overlayed += raster * factor_weights[rx]
+        profile = self.profiles[0]
+        with rasterio.open((self.output_directory+"/susceptibility_"+str(suffex)+".tif"), 'w', **profile) as dst:
+            dst.write(overlayed, 1)
 
     def number_of_pixels_in_susceptibility_classes(self, susceptibility_raster):
         print("Classifying pixels based on susceptibility ranges")
@@ -185,6 +142,8 @@ class SensitivityEstimator(object):
         self.factor_weight_keys = factor_data[0]
         self.factor_names = factor_data[1]
         self.factor_files = factor_data[2]
+        self.profiles = factor_data[3]
+        self.raster_sets = factor_data[4]
 
         susceptibility_classes_data = self.susceptibility_classes_data_preperation(susceptibility_classes=self.susceptibility_classes)
         self.susceptibility_classes_names = susceptibility_classes_data[0]
@@ -222,8 +181,6 @@ class SensitivityEstimator(object):
             fn = os.path.join(self.output_directory, 'sensitivity_results.csv')
             final_result_pd.to_csv(fn)
 
-        os.remove(os.path.join(self.output_directory, 'temp_lss.tif'))
-
     def setup(self):
         print("Setting up SensitivityEstimator...")
         self.load_data_from_json()
@@ -235,6 +192,9 @@ class SensitivityEstimator(object):
         factor_data = self.factor_data_preperation(factors=self.factors)
         self.factor_weight_keys = factor_data[0]
         self.factor_files = factor_data[2]
+        self.profiles = factor_data[3]
+        self.raster_sets = factor_data[4]
+
         weight_inputs = []
         for w, ww in enumerate(self.factor_weight_keys):
             weight_inputs.append(csv_file.at[index, ww])
@@ -246,11 +206,14 @@ class SensitivityEstimator(object):
     def compare(self, layer1, layer2):
         print("comparing",layer1,"and",layer2,"...")
 
-        lss_dataset1 = self.load_dataset(file_path=os.path.join(self.output_directory,layer1))
-        lss_np1 = self.raster_to_numpy(raster_dataset=lss_dataset1, no_data_value=lss_dataset1.GetRasterBand(1).GetNoDataValue())
-
-        lss_dataset2 = self.load_dataset(file_path=os.path.join(self.output_directory,layer2))
-        lss_np2 = self.raster_to_numpy(raster_dataset=lss_dataset2, no_data_value=lss_dataset2.GetRasterBand(1).GetNoDataValue())
+        with rasterio.open(os.path.join(self.output_directory,layer1)) as rf:
+            ds = rf.read(1)
+            lss_np1 = np.ma.masked_where(ds == rf.nodata, ds)
+            profile = rf.profile
+    
+        with rasterio.open(os.path.join(self.output_directory,layer2)) as rf:
+            ds = rf.read(1)
+            lss_np2 = np.ma.masked_where(ds == rf.nodata, ds)
 
         susceptibility_classes_data = self.susceptibility_classes_data_preperation(susceptibility_classes=self.susceptibility_classes)
         self.susceptibility_classes_names = susceptibility_classes_data[0]
@@ -263,11 +226,10 @@ class SensitivityEstimator(object):
         susceptibility_class_pixels2 = self.number_of_pixels_in_susceptibility_classes(susceptibility_raster=lss_np2)
 
         print("Calculating", layer1, "minus", layer2,"...")
-        difference_np = lss_np1-lss_np2
-        proj = lss_dataset1.GetProjection()
-        gt = lss_dataset1.GetGeoTransform()
-        self.raster_from_numpy(numpy_array=difference_np, projection=proj, geo_trans=gt, NoDataValue=0,
-                               output_file=os.path.join(self.output_directory,"susceptibility_difference.tif"))
+        difference_np = np.subtract(lss_np1.astype('int16'), lss_np2.astype('int16'))
+        profile['dtype'] = 'int16'
+        with rasterio.open(os.path.join(self.output_directory,"susceptibility_difference.tif"), 'w', **profile) as dst:
+            dst.write(difference_np, 1)
 
         print("")
         print("layer1--------------------")
