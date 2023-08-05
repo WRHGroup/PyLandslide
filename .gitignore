@@ -133,3 +133,7 @@ dmypy.json
 *.tfw
 *.xml
 *.ovr
+
+#other
+uint8/
+alinged_rasters/
