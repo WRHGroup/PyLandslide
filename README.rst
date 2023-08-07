@@ -18,7 +18,7 @@ Installation
 
 Pylandslide should work on Python 3.6 (or later) on Windows, Linux or OS X.
 
-See the documentation for information on `how to install Pylandslide <https://ierrg.github.io/PyLandslide/>`__.
+See the documentation for information on `how to install Pylandslide <https://ierrg.github.io/PyLandslide/installation.html>`__.
 
 Pylandslide can be installed by running:
 
@@ -26,7 +26,7 @@ Pylandslide can be installed by running:
 
     pip install PyLandslide
 
-For advanced users, developers, and those who with to contribute to further development of PyLandslide, make sue to have installed the required `dependencies <https://ierrg.github.io/PyLandslide/>`__. Then clone the repository:
+For advanced users, developers, and those who with to contribute to further development of PyLandslide, make sure to have installed the required `dependencies <https://ierrg.github.io/PyLandslide/installation.html>`__. Then clone the repository:
 
 .. code-block:: console
 
