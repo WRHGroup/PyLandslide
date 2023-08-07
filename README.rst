@@ -56,7 +56,7 @@ Please cite the following papers when using Pylandslide:
 License
 =======
 
-Copyright (C) 2023, Mohammed Basheer.
+Copyright (C) 2023, `Mohammed Basheer <https://scholar.google.com/citations?user=KM_oVpkAAAAJ&hl=en>`__.
 
 
 Pylandslide is released under the GNU General Public License.
