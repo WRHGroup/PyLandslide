@@ -1,5 +1,5 @@
-PyLandslide
-===========
+PyLandslide Python API
+======================
 
 .. toctree::
    :maxdepth: 4

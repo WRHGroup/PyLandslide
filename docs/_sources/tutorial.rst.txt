@@ -1,0 +1,27 @@
+Tutorial
+========
+
+Data Preparation
+----------------
+
+To be added
+
+Weight Range Analysis
+---------------------
+
+To be added
+
+Sensitivity Analysis
+---------------------
+
+To be added
+
+Generating susceptibility raster layer
+--------------------------------------
+
+To be added
+
+Comparing two susceptibility raster layer
+-----------------------------------------
+
+To be added
