@@ -2,7 +2,7 @@
 Pylandslide
 ===========
 
-Pylandslide a machine learning-assisted open-source Python tool for landslide susceptibility mapping and uncertainty analysis.
+Pylandslide is a machine learning-assisted open-source Python tool for landslide susceptibility mapping and uncertainty analysis.
 
 Introduction
 ============
@@ -11,7 +11,7 @@ For further details on how to install and use the tool, please refer to the `Doc
 
 Pylandslide is a tool for spatial mapping of landslide susceptibility. The tool uses “qualitative map combination,” in which the effects of multiple factors that contribute to landslide occurrence are combined using weights. The tool uses Machine learning to determine weights and their uncertainties. The tool is also designed to conduct sensitivity analysis based on weight ranges and spatially compare the outcomes of different weight choices.
 
-Landslide susceptibility and uncertainty analysis can be perfromed in Pylandslide either through a high-level commands or using Python code. Either way some inputs to different methods and functionalities need to be provided through JSON-based document format. The `Documentation <https://ierrg.github.io/PyLandslide/>`__ page provides further details on how to use the tool and provide the required inputs.
+Landslide susceptibility and uncertainty analysis can be performed in Pylandslide either through high-level commands or using Python code. Either way, some inputs to different methods and functionalities need to be provided through JSON-based document format. The `Documentation <https://ierrg.github.io/PyLandslide/>`__ page provides further details on how to use the tool and provide the required inputs.
 
 Installation
 ============
@@ -32,7 +32,7 @@ For advanced users, developers, and those who with to contribute to further deve
 
     git clone https://github.com/IERRG/PyLandslide.git
 
-Once the repository is cloned, navigate to its folder and run:
+Once the repository is cloned, navigate to its directory and run:
 
 .. code-block:: console
 
@@ -56,7 +56,7 @@ Please cite the following papers when using Pylandslide:
 License
 =======
 
-Copyright (C) 2023, Mohammed Basheer
+Copyright (C) 2023, Mohammed Basheer.
 
 
 Pylandslide is released under the GNU General Public License.
