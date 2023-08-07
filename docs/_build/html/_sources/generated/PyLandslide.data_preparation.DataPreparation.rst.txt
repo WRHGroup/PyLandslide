@@ -1,0 +1,29 @@
+﻿PyLandslide.data\_preparation.DataPreparation
+=============================================
+
+.. currentmodule:: PyLandslide.data_preparation
+
+.. autoclass:: DataPreparation
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~DataPreparation.__init__
+      ~DataPreparation.adjust
+      ~DataPreparation.align
+      ~DataPreparation.create_results_dict
+      ~DataPreparation.extract
+      ~DataPreparation.factor_data_preperation
+      ~DataPreparation.load_data_from_json
+      ~DataPreparation.setup
+   
+   
+
+   
+   
+   

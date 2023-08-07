@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PyLandslide.sensitivity &mdash; Pylandslide documentation 0.0.5 documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/sphinx_highlight.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            Pylandslide documentation
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../summary.html">Summary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../modules.html">PyLandslide</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Pylandslide documentation</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">PyLandslide.sensitivity</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for PyLandslide.sensitivity</h1><div class="highlight"><pre>
+<span></span><span class="c1">#loading neccessery packages</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">random</span>
+<span class="kn">import</span> <span class="nn">copy</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">import</span> <span class="nn">string</span>  
+<span class="kn">import</span> <span class="nn">rasterio</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="SensitivityEstimator"><a class="viewcode-back" href="../../generated/PyLandslide.sensitivity.SensitivityEstimator.html#PyLandslide.sensitivity.SensitivityEstimator">[docs]</a><span class="k">class</span> <span class="nc">SensitivityEstimator</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<div class="viewcode-block" id="SensitivityEstimator.__init__"><a class="viewcode-back" href="../../generated/PyLandslide.sensitivity.SensitivityEstimator.html#PyLandslide.sensitivity.SensitivityEstimator.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">json_file</span><span class="p">,</span> <span class="n">trials</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">json_file</span> <span class="o">=</span> <span class="n">json_file</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">trials</span> <span class="o">=</span> <span class="n">trials</span></div>
+
+    <span class="k">def</span> <span class="nf">load_data_from_json</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Load data from a file</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">normpath</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">(),</span> <span class="bp">self</span><span class="o">.</span><span class="n">json_file</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">json_file_directory</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">normpath</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">data</span><span class="p">))</span>
+        
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Loading data from file: &quot;</span><span class="si">{}</span><span class="s1">&quot;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">data</span><span class="p">))</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+                <span class="n">loaded_file</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">loaded_file</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;factors&#39;</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;factors has not been found in the JSON file&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">factors</span> <span class="o">=</span> <span class="n">loaded_file</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;factors&#39;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">loaded_file</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;susceptibility_classes&#39;</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;susceptibility_classes has not been found in the JSON file&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">susceptibility_classes</span> <span class="o">=</span> <span class="n">loaded_file</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;susceptibility_classes&#39;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">loaded_file</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;output_directory&#39;</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;output directory set to the cwd. If you wish to change this default value, add output_directory to the inputs provided in the JSON file&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">normpath</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">json_file_directory</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">normpath</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">json_file_directory</span><span class="p">,</span> <span class="n">loaded_file</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;output_directory&#39;</span><span class="p">)))</span>
+
+        <span class="k">if</span> <span class="n">loaded_file</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;weight_csv_sensitivity_file&#39;</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;weight_csv_sensitivity_file has not been found in the JSON file&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">weight_csv_sensitivity_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">normpath</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">json_file_directory</span><span class="p">,</span> <span class="n">loaded_file</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;weight_csv_sensitivity_file&#39;</span><span class="p">)))</span>
+
+    <span class="k">def</span> <span class="nf">factor_data_preperation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">factors</span><span class="p">):</span>
+        <span class="n">keys</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">names</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">files</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">profiles</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">raster_sets</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">factors</span><span class="p">:</span>
+            <span class="n">keys</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="s2">&quot;weight_&quot;</span><span class="o">+</span><span class="n">f</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]))</span>
+            <span class="n">names</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">f</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">])</span>
+            <span class="n">files</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">normpath</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">json_file_directory</span><span class="p">,</span> <span class="n">f</span><span class="p">[</span><span class="s2">&quot;file&quot;</span><span class="p">])))</span>
+            <span class="k">with</span> <span class="n">rasterio</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">normpath</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">json_file_directory</span><span class="p">,</span> <span class="n">f</span><span class="p">[</span><span class="s2">&quot;file&quot;</span><span class="p">])))</span> <span class="k">as</span> <span class="n">src</span><span class="p">:</span>
+                <span class="n">profiles</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">src</span><span class="o">.</span><span class="n">profile</span><span class="p">)</span>
+                <span class="n">band1</span> <span class="o">=</span> <span class="n">src</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+                <span class="n">masked_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked_where</span><span class="p">(</span><span class="n">band1</span> <span class="o">==</span> <span class="n">src</span><span class="o">.</span><span class="n">nodata</span><span class="p">,</span> <span class="n">band1</span><span class="p">)</span>
+                <span class="n">raster_sets</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">masked_data</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">keys</span><span class="p">,</span> <span class="n">names</span><span class="p">,</span> <span class="n">files</span><span class="p">,</span> <span class="n">profiles</span><span class="p">,</span> <span class="n">raster_sets</span>
+
+    <span class="k">def</span> <span class="nf">susceptibility_classes_data_preperation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">susceptibility_classes</span><span class="p">):</span>
+        <span class="n">names</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">class_upper_bounds</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">class_lower_bounds</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">susceptibility_classes</span><span class="p">:</span>
+            <span class="n">names</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">])</span>
+            <span class="n">class_upper_bounds</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="s2">&quot;class_upper_bound&quot;</span><span class="p">])</span>
+            <span class="n">class_lower_bounds</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="s2">&quot;class_lower_bound&quot;</span><span class="p">])</span>
+        <span class="k">return</span> <span class="n">names</span><span class="p">,</span> <span class="n">class_lower_bounds</span><span class="p">,</span> <span class="n">class_upper_bounds</span>
+
+    <span class="k">def</span> <span class="nf">check_class_upper_and_lower_bounds</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">upper</span><span class="p">,</span> <span class="n">lower</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">v</span><span class="p">,</span><span class="n">vv</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">upper</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">lower</span><span class="p">[</span><span class="n">v</span><span class="p">]</span><span class="o">&gt;=</span> <span class="n">upper</span><span class="p">[</span><span class="n">v</span><span class="p">]:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;class_upper_bound for each factor must be greater than class_lower_bound&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">create_results_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">results_dic</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">susceptibility_classes_names</span><span class="p">:</span>
+            <span class="n">results_dic</span><span class="p">[</span><span class="n">n</span><span class="p">]</span><span class="o">=</span><span class="p">[]</span>
+        <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">factor_weight_keys</span><span class="p">:</span>
+            <span class="n">results_dic</span><span class="p">[</span><span class="n">n</span><span class="p">]</span><span class="o">=</span><span class="p">[]</span>
+        <span class="k">return</span> <span class="n">results_dic</span>
+
+    <span class="k">def</span> <span class="nf">generate_random_weights</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_pd_table</span><span class="p">,</span> <span class="n">data_length</span><span class="p">):</span>
+        <span class="n">random_weights</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">random_ix</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="p">(</span><span class="n">data_length</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span>
+        <span class="k">for</span> <span class="n">nx</span><span class="p">,</span> <span class="n">name</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">factor_names</span><span class="p">):</span>
+            <span class="n">random_weights</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">input_pd_table</span><span class="o">.</span><span class="n">at</span><span class="p">[</span><span class="n">random_ix</span><span class="p">,</span><span class="n">name</span><span class="p">])</span>
+        <span class="k">return</span> <span class="n">random_weights</span>
+
+    <span class="k">def</span> <span class="nf">load_weight_csv_sensitivity_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sens_csv</span><span class="p">):</span>
+        <span class="n">csv_file</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">sens_csv</span><span class="p">)</span>
+        <span class="n">csv_file</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;id&#39;</span>
+        <span class="n">number_of_rows</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">csv_file</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">csv_file</span><span class="p">,</span> <span class="n">number_of_rows</span>
+
+    <span class="k">def</span> <span class="nf">overlay_factors</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">factor_weights</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Overlaying factors...&quot;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">rx</span><span class="p">,</span> <span class="n">raster</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">raster_sets</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">rx</span><span class="o">==</span><span class="mi">0</span><span class="p">:</span>
+                <span class="n">overlayed</span> <span class="o">=</span> <span class="n">raster</span> <span class="o">*</span> <span class="n">factor_weights</span><span class="p">[</span><span class="n">rx</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">overlayed</span> <span class="o">+=</span> <span class="n">raster</span> <span class="o">*</span> <span class="n">factor_weights</span><span class="p">[</span><span class="n">rx</span><span class="p">]</span>
+        <span class="n">susceptibility_class_pixels</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">number_of_pixels_in_susceptibility_classes</span><span class="p">(</span><span class="n">susceptibility_raster</span><span class="o">=</span><span class="n">overlayed</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">susceptibility_class_pixels</span>
+
+    <span class="k">def</span> <span class="nf">generate_layer</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">factor_weights</span><span class="p">,</span> <span class="n">suffex</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Generating layer by overlaying factors...&quot;</span><span class="p">)</span>
+        <span class="n">sum_max_weight</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">rx</span><span class="p">,</span> <span class="n">raster</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">raster_sets</span><span class="p">):</span>
+            <span class="n">sum_max_weight</span> <span class="o">+=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">raster</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">rx</span><span class="o">==</span><span class="mi">0</span><span class="p">:</span>
+                <span class="n">overlayed</span> <span class="o">=</span> <span class="n">raster</span> <span class="o">*</span> <span class="n">factor_weights</span><span class="p">[</span><span class="n">rx</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">overlayed</span> <span class="o">+=</span> <span class="n">raster</span> <span class="o">*</span> <span class="n">factor_weights</span><span class="p">[</span><span class="n">rx</span><span class="p">]</span>
+        <span class="n">profile</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">profiles</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">with</span> <span class="n">rasterio</span><span class="o">.</span><span class="n">open</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="o">+</span><span class="s2">&quot;/susceptibility_&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">suffex</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot;.tif&quot;</span><span class="p">),</span> <span class="s1">&#39;w&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">profile</span><span class="p">)</span> <span class="k">as</span> <span class="n">dst</span><span class="p">:</span>
+            <span class="n">dst</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">overlayed</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">number_of_pixels_in_susceptibility_classes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">susceptibility_raster</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Classifying pixels based on susceptibility ranges&quot;</span><span class="p">)</span>
+        <span class="n">class_pixels</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">susceptibility_classes_names</span><span class="p">:</span>
+            <span class="n">class_pixels</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+        <span class="n">total_number_of_pixels</span> <span class="o">=</span> <span class="p">(</span><span class="n">susceptibility_raster</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+
+        <span class="k">for</span> <span class="n">c</span><span class="p">,</span> <span class="n">cn</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">susceptibility_classes_names</span><span class="p">):</span>
+            <span class="n">class_pixels</span><span class="p">[</span><span class="n">c</span><span class="p">]</span> <span class="o">=</span> <span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">susceptibility_classes_lower_bounds</span><span class="p">[</span><span class="n">c</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">susceptibility_raster</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">susceptibility_raster</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">susceptibility_classes_upper_bounds</span><span class="p">[</span><span class="n">c</span><span class="p">]))</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="o">/</span><span class="n">total_number_of_pixels</span>
+
+        <span class="k">return</span> <span class="n">class_pixels</span>
+
+    <span class="k">def</span> <span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">factor_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">factor_data_preperation</span><span class="p">(</span><span class="n">factors</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">factors</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">factor_weight_keys</span> <span class="o">=</span> <span class="n">factor_data</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">factor_names</span> <span class="o">=</span> <span class="n">factor_data</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">factor_files</span> <span class="o">=</span> <span class="n">factor_data</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">profiles</span> <span class="o">=</span> <span class="n">factor_data</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">raster_sets</span> <span class="o">=</span> <span class="n">factor_data</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span>
+
+        <span class="n">susceptibility_classes_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">susceptibility_classes_data_preperation</span><span class="p">(</span><span class="n">susceptibility_classes</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">susceptibility_classes</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">susceptibility_classes_names</span> <span class="o">=</span> <span class="n">susceptibility_classes_data</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">susceptibility_classes_lower_bounds</span> <span class="o">=</span> <span class="n">susceptibility_classes_data</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">susceptibility_classes_upper_bounds</span> <span class="o">=</span> <span class="n">susceptibility_classes_data</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">check_class_upper_and_lower_bounds</span><span class="p">(</span><span class="n">upper</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">susceptibility_classes_upper_bounds</span><span class="p">,</span><span class="n">lower</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">susceptibility_classes_lower_bounds</span><span class="p">)</span>
+
+        <span class="c1">#create results dic</span>
+        <span class="n">final_results_dic</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">create_results_dict</span><span class="p">()</span>
+        <span class="n">weight_csv_sensitivity_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">load_weight_csv_sensitivity_file</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">weight_csv_sensitivity_file</span><span class="p">)</span>
+        <span class="n">sens_table_pd</span> <span class="o">=</span> <span class="n">weight_csv_sensitivity_data</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">availabel_items</span> <span class="o">=</span> <span class="n">weight_csv_sensitivity_data</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">availabel_items</span><span class="o">&lt;</span><span class="bp">self</span><span class="o">.</span><span class="n">trials</span><span class="p">):</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Warning: the number of trials is set to&quot;</span><span class="p">,</span> <span class="n">availabel_items</span><span class="p">,</span> <span class="s2">&quot;, as this is the maximum number of data available in&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">weight_csv_sensitivity_file</span><span class="p">)</span>
+
+        <span class="n">successful_trials</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">while</span> <span class="n">successful_trials</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">trials</span><span class="p">:</span>
+            <span class="n">t0</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+            <span class="n">weight_inputs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">generate_random_weights</span><span class="p">(</span><span class="n">sens_table_pd</span><span class="p">,</span> <span class="n">availabel_items</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;============================================ starting trial &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">successful_trials</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span>
+            <span class="n">susceptability_assessment</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">overlay_factors</span><span class="p">(</span><span class="n">factor_weights</span><span class="o">=</span><span class="n">weight_inputs</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">sc</span><span class="p">,</span> <span class="n">susceptibility_class</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">susceptibility_classes_names</span><span class="p">):</span>
+                <span class="n">final_results_dic</span><span class="p">[</span><span class="n">susceptibility_class</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">susceptability_assessment</span><span class="p">[</span><span class="n">sc</span><span class="p">])</span>
+            <span class="k">for</span> <span class="n">wc</span><span class="p">,</span> <span class="n">factor_weight_key</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">factor_weight_keys</span><span class="p">):</span>
+                <span class="n">final_results_dic</span><span class="p">[</span><span class="n">factor_weight_key</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">weight_inputs</span><span class="p">[</span><span class="n">wc</span><span class="p">])</span>
+
+            <span class="n">percent</span> <span class="o">=</span> <span class="p">(</span><span class="n">successful_trials</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">trials</span><span class="o">*</span><span class="mi">100</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;time taken in the trial&quot;</span><span class="p">,</span> <span class="nb">round</span><span class="p">((</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span><span class="o">-</span><span class="n">t0</span><span class="p">),</span><span class="mi">0</span><span class="p">),</span> <span class="s2">&quot;seconds|progress: (trial =&quot;</span><span class="p">,</span><span class="n">successful_trials</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="s2">&quot;) (percentage =&quot;</span><span class="p">,</span> <span class="nb">round</span><span class="p">(</span><span class="n">percent</span><span class="p">,</span><span class="mi">2</span><span class="p">),</span> <span class="s2">&quot;%)&quot;</span><span class="p">)</span>
+            <span class="n">successful_trials</span> <span class="o">+=</span> <span class="mi">1</span>  
+
+            <span class="c1">#write the results</span>
+            <span class="n">final_result_pd</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">final_results_dic</span><span class="p">)</span>
+            <span class="n">final_result_pd</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;id&#39;</span>
+            <span class="n">fn</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">,</span> <span class="s1">&#39;sensitivity_results.csv&#39;</span><span class="p">)</span>
+            <span class="n">final_result_pd</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">fn</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">setup</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Setting up SensitivityEstimator...&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">load_data_from_json</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">generate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="n">csv_sensitivity</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;generating road susceptibility raster layer...&quot;</span><span class="p">)</span>
+        <span class="n">csv_file</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">,</span> <span class="n">csv_sensitivity</span><span class="p">))</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s1">&#39;id&#39;</span><span class="p">)</span>
+        
+        <span class="n">factor_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">factor_data_preperation</span><span class="p">(</span><span class="n">factors</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">factors</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">factor_weight_keys</span> <span class="o">=</span> <span class="n">factor_data</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">factor_files</span> <span class="o">=</span> <span class="n">factor_data</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">profiles</span> <span class="o">=</span> <span class="n">factor_data</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">raster_sets</span> <span class="o">=</span> <span class="n">factor_data</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span>
+
+        <span class="n">weight_inputs</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">w</span><span class="p">,</span> <span class="n">ww</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">factor_weight_keys</span><span class="p">):</span>
+            <span class="n">weight_inputs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">csv_file</span><span class="o">.</span><span class="n">at</span><span class="p">[</span><span class="n">index</span><span class="p">,</span> <span class="n">ww</span><span class="p">])</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">generate_layer</span><span class="p">(</span><span class="n">factor_weights</span><span class="o">=</span><span class="n">weight_inputs</span><span class="p">,</span> <span class="n">suffex</span><span class="o">=</span><span class="n">index</span><span class="p">)</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Layer generated successfully.&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">compare</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">layer1</span><span class="p">,</span> <span class="n">layer2</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;comparing&quot;</span><span class="p">,</span><span class="n">layer1</span><span class="p">,</span><span class="s2">&quot;and&quot;</span><span class="p">,</span><span class="n">layer2</span><span class="p">,</span><span class="s2">&quot;...&quot;</span><span class="p">)</span>
+
+        <span class="k">with</span> <span class="n">rasterio</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">,</span><span class="n">layer1</span><span class="p">))</span> <span class="k">as</span> <span class="n">rf</span><span class="p">:</span>
+            <span class="n">ds</span> <span class="o">=</span> <span class="n">rf</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">lss_np1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked_where</span><span class="p">(</span><span class="n">ds</span> <span class="o">==</span> <span class="n">rf</span><span class="o">.</span><span class="n">nodata</span><span class="p">,</span> <span class="n">ds</span><span class="p">)</span>
+            <span class="n">profile</span> <span class="o">=</span> <span class="n">rf</span><span class="o">.</span><span class="n">profile</span>
+    
+        <span class="k">with</span> <span class="n">rasterio</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">,</span><span class="n">layer2</span><span class="p">))</span> <span class="k">as</span> <span class="n">rf</span><span class="p">:</span>
+            <span class="n">ds</span> <span class="o">=</span> <span class="n">rf</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">lss_np2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked_where</span><span class="p">(</span><span class="n">ds</span> <span class="o">==</span> <span class="n">rf</span><span class="o">.</span><span class="n">nodata</span><span class="p">,</span> <span class="n">ds</span><span class="p">)</span>
+
+        <span class="n">susceptibility_classes_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">susceptibility_classes_data_preperation</span><span class="p">(</span><span class="n">susceptibility_classes</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">susceptibility_classes</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">susceptibility_classes_names</span> <span class="o">=</span> <span class="n">susceptibility_classes_data</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">susceptibility_classes_lower_bounds</span> <span class="o">=</span> <span class="n">susceptibility_classes_data</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">susceptibility_classes_upper_bounds</span> <span class="o">=</span> <span class="n">susceptibility_classes_data</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">check_class_upper_and_lower_bounds</span><span class="p">(</span><span class="n">upper</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">susceptibility_classes_upper_bounds</span><span class="p">,</span><span class="n">lower</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">susceptibility_classes_lower_bounds</span><span class="p">)</span>
+
+        <span class="n">susceptibility_class_pixels1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">number_of_pixels_in_susceptibility_classes</span><span class="p">(</span><span class="n">susceptibility_raster</span><span class="o">=</span><span class="n">lss_np1</span><span class="p">)</span>
+        <span class="n">susceptibility_class_pixels2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">number_of_pixels_in_susceptibility_classes</span><span class="p">(</span><span class="n">susceptibility_raster</span><span class="o">=</span><span class="n">lss_np2</span><span class="p">)</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Calculating&quot;</span><span class="p">,</span> <span class="n">layer1</span><span class="p">,</span> <span class="s2">&quot;minus&quot;</span><span class="p">,</span> <span class="n">layer2</span><span class="p">,</span><span class="s2">&quot;...&quot;</span><span class="p">)</span>
+        <span class="n">difference_np</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">subtract</span><span class="p">(</span><span class="n">lss_np1</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;int16&#39;</span><span class="p">),</span> <span class="n">lss_np2</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;int16&#39;</span><span class="p">))</span>
+        <span class="n">profile</span><span class="p">[</span><span class="s1">&#39;dtype&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;int16&#39;</span>
+        <span class="k">with</span> <span class="n">rasterio</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">,</span><span class="s2">&quot;susceptibility_difference.tif&quot;</span><span class="p">),</span> <span class="s1">&#39;w&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">profile</span><span class="p">)</span> <span class="k">as</span> <span class="n">dst</span><span class="p">:</span>
+            <span class="n">dst</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">difference_np</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;layer1--------------------&quot;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">s</span><span class="p">,</span> <span class="n">scn</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">susceptibility_classes_names</span><span class="p">):</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">scn</span><span class="p">,</span><span class="s2">&quot;:&quot;</span><span class="p">,</span> <span class="nb">round</span><span class="p">(</span><span class="n">susceptibility_class_pixels1</span><span class="p">[</span><span class="n">s</span><span class="p">],</span><span class="mi">3</span><span class="p">))</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;layer2--------------------&quot;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">s</span><span class="p">,</span> <span class="n">scn</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">susceptibility_classes_names</span><span class="p">):</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">scn</span><span class="p">,</span><span class="s2">&quot;:&quot;</span><span class="p">,</span> <span class="nb">round</span><span class="p">(</span><span class="n">susceptibility_class_pixels2</span><span class="p">[</span><span class="n">s</span><span class="p">],</span><span class="mi">3</span><span class="p">))</span></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Mohammed Basheer.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

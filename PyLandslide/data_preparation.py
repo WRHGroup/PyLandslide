@@ -9,13 +9,22 @@ from rasterio.warp import reproject, Resampling, calculate_default_transform
 import rasterio
 
 class DataPreparation(object):
+    """
+    test test test
+    """
     def __init__(self, json_file=None, folder_name=None, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.json_file = json_file
         self.folder_name = folder_name
 
     def load_data_from_json(self, **kwargs):
-        """Load data from a file
+        """
+        Load configuration
+        Args:
+            **kwargs:
+
+        Returns: Attibutes
+
         """
         data = os.path.normpath(os.path.join(os.getcwd(), self.json_file))
         self.json_file_directory = os.path.normpath(os.path.dirname(data))
@@ -44,6 +53,11 @@ class DataPreparation(object):
         self.nonlandslide_locations = os.path.normpath(os.path.join(self.json_file_directory, loaded_file.pop('nonlandslide_locations')))
 
     def setup(self):
+        """
+        
+        Returns:
+
+        """
         self.load_data_from_json()
         print('Setting up WeightRangePreparation based on the file: "{}"'.format(self.json_file))
 
