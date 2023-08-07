@@ -1,12 +1,12 @@
 Installation
 ============
 
-Pylandslide should work on Python 3.6 (or later) on Windows, Linux or OS X.
+PyLandslide should work on Python 3.6 (or later) on Windows, Linux or OS X.
 
 Dependencies
 ------------
 
-Pylandslide uses other freely available tools:
+PyLandslide uses other freely available tools:
 
    * `Rasterio <https://github.com/rasterio/rasterio.git>`_
 
@@ -22,16 +22,16 @@ Pylandslide uses other freely available tools:
 
 Installing with pip
 -------------------
-Pylandslide and its dependencies can be installed through pip by running the following command:
+PyLandslide and its dependencies can be installed through pip by running the following command:
 
 .. code-block:: shell
 
-  pip install Pylandslide
+  pip install PyLandslide
 
 Installing from source code
 ---------------------------
-Pylandslide can be installed by downloading the source code and installing it locally. This approach is useful for those who want to use the development version instead of the released version published in pip. Also, to modify the source code or contribute to code development, one would need to have the code locally.
-Installing Pylandslide using this approach requires first cloning the code from the `GitHub Repository <https://github.com/IERRG/PyLandslide.git>`_. This can be done by running the following command:
+PyLandslide can be installed by downloading the source code and installing it locally. This approach is useful for those who want to use the development version instead of the released version published in pip. Also, to modify the source code or contribute to code development, one would need to have the code locally.
+Installing PyLandslide using this approach requires first cloning the code from the `GitHub Repository <https://github.com/IERRG/PyLandslide.git>`_. This can be done by running the following command:
 
 .. code-block:: console
 

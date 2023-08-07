@@ -4,12 +4,12 @@ License
 Software
 --------
 
-Pylandslide is released under the GNU General Public License.
+PyLandslide is released under the GNU General Public License.
 
 Copyright (C) 2023, Mohammed Basheer.
 
 Documentation
 -------------
-Pylandslide is released under the GNU General Public License.
+PyLandslide is released under the GNU General Public License.
 
 Copyright (C) 2023, `Mohammed Basheer <https://scholar.google.com/citations?user=KM_oVpkAAAAJ&hl=en>`__.
