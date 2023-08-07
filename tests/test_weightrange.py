@@ -10,7 +10,7 @@ from sklearn.model_selection import train_test_split
 
 def test_json_loading():
     #Test that the json file loaded
-    WeightRangeModel = WeightRangeEstimator('tests/files/weight_range_json_file.json')
+    WeightRangeModel = WeightRangeEstimator('tests/files/2_weight_range_json_file.json')
     WeightRangeModel.setup()
 
     features_file_path = os.path.normpath(os.path.join(os.getcwd(),'tests/files/csv_data/features.csv'))
@@ -20,7 +20,7 @@ def test_json_loading():
 
 def test_csv_df_loading():
     #Test that the json file loaded
-    WeightRangeModel = WeightRangeEstimator('tests/files/weight_range_json_file.json')
+    WeightRangeModel = WeightRangeEstimator('tests/files/2_weight_range_json_file.json')
     WeightRangeModel.setup()
     
     targets_df = WeightRangeModel.load_data_from_csv(WeightRangeModel.targets_file, index_column = 'id')
@@ -29,7 +29,7 @@ def test_csv_df_loading():
     assert(type(features_df) == pd.DataFrame)
 
 def test_overall_accuracy_metric_model():
-    WeightRangeModel = WeightRangeEstimator('tests/files/weight_range_json_file.json')
+    WeightRangeModel = WeightRangeEstimator('tests/files/2_weight_range_json_file.json')
     WeightRangeModel.setup()
     
     targets_df = WeightRangeModel.load_data_from_csv(WeightRangeModel.targets_file, index_column = 'id')
@@ -51,7 +51,7 @@ def test_overall_accuracy_metric_model():
     assert(metrics[1] <= 1)
 
 def test_random_forest_model_metric_model():
-    WeightRangeModel = WeightRangeEstimator('tests/files/weight_range_json_file.json')
+    WeightRangeModel = WeightRangeEstimator('tests/files/2_weight_range_json_file.json')
     WeightRangeModel.setup()
     
     targets_df = WeightRangeModel.load_data_from_csv(WeightRangeModel.targets_file, index_column = 'id')
