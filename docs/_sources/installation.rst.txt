@@ -1,0 +1,50 @@
+Installation
+============
+
+Pylandslide should work on Python 3.6 (or later) on Windows, Linux or OS X.
+
+Dependencies
+------------
+
+Pylandslide uses other freely available tools:
+
+   * `Rasterio <https://github.com/rasterio/rasterio.git>`_
+
+   * `Geopandas <https://github.com/geopandas/geopandas.git>`_
+
+   * `NumPy <https://github.com/numpy/numpy.git>`_
+
+   * `Scikit-learn <https://github.com/scikit-learn/scikit-learn.git>`_
+
+   * `Pandas <https://github.com/pandas-dev/pandas.git>`_
+
+   * `Click <https://github.com/pallets/click.git>`_
+
+Installing with pip
+-------------------
+Pylandslide and its dependencies can be installed through pip by running the following command:
+
+.. code-block:: shell
+
+  pip install Pylandslide
+
+Installing from source code
+---------------------------
+Pylandslide can be installed by downloading the source code and installing it locally. This approach is useful for those who want to use the development version instead of the released version published in pip. Also, to modify the source code or contribute to code development, one would need to have the code locally.
+Installing Pylandslide using this approach requires first cloning the code from the `GitHub Repository <https://github.com/IERRG/PyLandslide.git>`_. This can be done by running the following command:
+
+.. code-block:: console
+
+    git clone https://github.com/IERRG/PyLandslide.git
+
+Once the repository is cloned, navigate to its directory and run:
+
+.. code-block:: console
+
+    python setup.py install
+
+Or the following for development mode:
+
+.. code-block:: console
+
+    python setup.py develop
