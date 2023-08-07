@@ -71,14 +71,7 @@ instance/
 .scrapy
 
 # Sphinx documentation
-docs/*.rst
-docs/_build/doctrees
-docs/generated
-docs/conf.py
-docs/make.bat
-docs/Makefile
-docs/_static
-docs/_templates
+sphinx
 
 # PyBuilder
 target/
