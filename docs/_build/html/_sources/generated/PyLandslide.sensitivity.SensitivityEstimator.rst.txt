@@ -1,0 +1,36 @@
+﻿PyLandslide.sensitivity.SensitivityEstimator
+============================================
+
+.. currentmodule:: PyLandslide.sensitivity
+
+.. autoclass:: SensitivityEstimator
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~SensitivityEstimator.__init__
+      ~SensitivityEstimator.check_class_upper_and_lower_bounds
+      ~SensitivityEstimator.compare
+      ~SensitivityEstimator.create_results_dict
+      ~SensitivityEstimator.execute
+      ~SensitivityEstimator.factor_data_preperation
+      ~SensitivityEstimator.generate
+      ~SensitivityEstimator.generate_layer
+      ~SensitivityEstimator.generate_random_weights
+      ~SensitivityEstimator.load_data_from_json
+      ~SensitivityEstimator.load_weight_csv_sensitivity_file
+      ~SensitivityEstimator.number_of_pixels_in_susceptibility_classes
+      ~SensitivityEstimator.overlay_factors
+      ~SensitivityEstimator.setup
+      ~SensitivityEstimator.susceptibility_classes_data_preperation
+   
+   
+
+   
+   
+   

@@ -1,0 +1,7 @@
+PyLandslide
+===========
+
+.. toctree::
+   :maxdepth: 4
+
+   PyLandslide

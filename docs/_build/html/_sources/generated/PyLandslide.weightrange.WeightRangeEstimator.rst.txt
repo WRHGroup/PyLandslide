@@ -1,0 +1,28 @@
+﻿PyLandslide.weightrange.WeightRangeEstimator
+============================================
+
+.. currentmodule:: PyLandslide.weightrange
+
+.. autoclass:: WeightRangeEstimator
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~WeightRangeEstimator.__init__
+      ~WeightRangeEstimator.calculate_weight_range
+      ~WeightRangeEstimator.feature_importance_model
+      ~WeightRangeEstimator.load_data_from_csv
+      ~WeightRangeEstimator.load_data_from_json
+      ~WeightRangeEstimator.overall_accuracy
+      ~WeightRangeEstimator.setup
+   
+   
+
+   
+   
+   
