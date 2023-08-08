@@ -1,0 +1,32 @@
+The "weightrange" command
+--------------------------
+This uses Random Forest Classification Machine Learning Models to estimate weight ranges of the factors contributing
+to the occurrence of landslides. The data required for this method are provided and loaded from a JSON-based document.
+The results are written to a CSV file specified in the JSON-based document.
+
+For help on the inputs of this command, run the following:
+
+.. code-block:: console
+
+    PyLandslide weightrange --help
+
+This results in the following, including three inputs:
+
+.. code-block:: console
+
+    Usage: PyLandslide weightrange [OPTIONS]
+
+        Determine weight range based on ML.
+
+    Options:
+        -f, --file-name TEXT  JSON file containing the weight range config.
+        --help                Show this message and exit.
+
+To use the ``compare`` command, run the following and make sure to replace the inputs based on your case:
+
+.. code-block:: console
+
+    PyLandslide weightrange -f json_file.json
+
+Further details on the structure and inputs to the JSON file are in the `Tutorials Section <https://ierrg.github.io/PyLandslide/tutorial.html>`_.
+

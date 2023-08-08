@@ -7,7 +7,7 @@ PyLandslide is a machine learning-assisted open-source Python tool for landslide
 Introduction
 ============
 
-For further details on how to install and use the tool, please refer to the `Documentation <https://ierrg.github.io/PyLandslide/>`__.
+For details on how to install and use the tool, please refer to the `Documentation <https://ierrg.github.io/PyLandslide/>`__.
 
 PyLandslide is a tool for spatial mapping of landslide susceptibility. The tool uses “qualitative map combination,” in which the effects of multiple factors that contribute to landslide occurrence are combined using weights. The tool uses Machine learning to determine weights and their uncertainties. The tool is also designed to conduct sensitivity analysis based on weight ranges and spatially compare the outcomes of different weight choices.
 
@@ -18,7 +18,7 @@ Installation
 
 PyLandslide should work on Python 3.6 (or later) on Windows, Linux or OS X.
 
-See the documentation for information on `how to install PyLandslide <https://ierrg.github.io/PyLandslide/installation.html>`__.
+See the documentation for details on `how to install PyLandslide <https://ierrg.github.io/PyLandslide/installation.html>`__.
 
 PyLandslide can be installed by running:
 
@@ -26,7 +26,7 @@ PyLandslide can be installed by running:
 
     pip install PyLandslide
 
-For advanced users, developers, and those who with to contribute to further development of PyLandslide, make sure to have installed the required `dependencies <https://ierrg.github.io/PyLandslide/installation.html>`__. Then clone the repository:
+For advanced users, developers, and those who wish to contribute to the development of PyLandslide, make sure to have installed the required `dependencies <https://ierrg.github.io/PyLandslide/installation.html>`__. Then clone the repository:
 
 .. code-block:: console
 
@@ -56,7 +56,7 @@ Please cite the following papers when using PyLandslide:
 License
 =======
 
-Copyright (C) 2023, `Mohammed Basheer <https://scholar.google.com/citations?user=KM_oVpkAAAAJ&hl=en>`__.
+Copyright (C) 2023, `Mohammed Basheer <https://scholar.google.com/citations?user=KM_oVpkAAAAJ&hl=en>`__ and `Thomas Oommen <https://scholar.google.com/citations?user=EP89cqIAAAAJ&hl=en>`__.
 
 
 PyLandslide is released under the GNU General Public License.

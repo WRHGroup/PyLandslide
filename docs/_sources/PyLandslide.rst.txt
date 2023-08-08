@@ -1,29 +1,14 @@
-Data Preparation
------------------
+.. autosummary::
+   :toctree: generated/
 
-Contains methods used for data preparation.
+   PyLandslide.data_preparation
 
 .. autosummary::
    :toctree: generated/
 
-   PyLandslide.data_preparation.DataPreparation
-
-Weight Uncertainty Analayis
-------------------------------
-
-Contains weight uncertainty analysis.
+   PyLandslide.weightrange
 
 .. autosummary::
    :toctree: generated/
 
-   PyLandslide.weightrange.WeightRangeEstimator
-
-Sensitivity Analysis
-------------------------------
-
-Contains sensitivity analysis functionalities.
-
-.. autosummary::
-   :toctree: generated/
-
-   PyLandslide.sensitivity.SensitivityEstimator
+   PyLandslide.sensitivity

@@ -15,6 +15,7 @@ The source code of PyLandslide is hosted on the following `GitHub Repository <ht
    
    introduction
    installation
+   command_line
    tutorial
    modules
    license

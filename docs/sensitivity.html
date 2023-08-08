@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>&lt;no title&gt; &mdash; PyLandslide Documentation 0.0.5 documentation</title>
+  <title>The “sensitivity” command &mdash; PyLandslide Documentation 0.0.5 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -19,8 +19,8 @@
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="PyLandslide.data_preparation" href="generated/PyLandslide.data_preparation.html" />
-    <link rel="prev" title="PyLandslide Python API" href="modules.html" /> 
+    <link rel="next" title="The “weightrange” command" href="weightrange.html" />
+    <link rel="prev" title="The “mldata” command" href="mldata.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -43,10 +43,19 @@
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
-<ul>
+<ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="command_line.html">Command Line Interface</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="command_line.html">Command Line Interface</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="available_commands.html">Available commands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="compare.html">The “compare” command</a></li>
+<li class="toctree-l2"><a class="reference internal" href="coregister.html">The “coregister” command</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generate.html">The “generate” command</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mldata.html">The “mldata” command</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">The “sensitivity” command</a></li>
+<li class="toctree-l2"><a class="reference internal" href="weightrange.html">The “weightrange” command</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="tutorial.html">Tutorials</a></li>
 <li class="toctree-l1"><a class="reference internal" href="modules.html">PyLandslide Python API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="license.html">License</a></li>
@@ -67,10 +76,10 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
-          <li class="breadcrumb-item"><a href="modules.html">PyLandslide Python API</a></li>
-      <li class="breadcrumb-item active">&lt;no title&gt;</li>
+          <li class="breadcrumb-item"><a href="command_line.html">Command Line Interface</a></li>
+      <li class="breadcrumb-item active">The “sensitivity” command</li>
       <li class="wy-breadcrumbs-aside">
-            <a href="_sources/PyLandslide.rst.txt" rel="nofollow"> View page source</a>
+            <a href="_sources/sensitivity.rst.txt" rel="nofollow"> View page source</a>
       </li>
   </ul>
   <hr/>
@@ -78,34 +87,39 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <table class="autosummary longtable docutils align-default">
-<tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="generated/PyLandslide.data_preparation.html#module-PyLandslide.data_preparation" title="PyLandslide.data_preparation"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PyLandslide.data_preparation</span></code></a></p></td>
-<td><p></p></td>
-</tr>
-</tbody>
-</table>
-<table class="autosummary longtable docutils align-default">
-<tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="generated/PyLandslide.weightrange.html#module-PyLandslide.weightrange" title="PyLandslide.weightrange"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PyLandslide.weightrange</span></code></a></p></td>
-<td><p></p></td>
-</tr>
-</tbody>
-</table>
-<table class="autosummary longtable docutils align-default">
-<tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="generated/PyLandslide.sensitivity.html#module-PyLandslide.sensitivity" title="PyLandslide.sensitivity"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PyLandslide.sensitivity</span></code></a></p></td>
-<td><p></p></td>
-</tr>
-</tbody>
-</table>
+  <section id="the-sensitivity-command">
+<h1>The “sensitivity” command<a class="headerlink" href="#the-sensitivity-command" title="Permalink to this heading"></a></h1>
+<p>This command is used to perform a sensitivity analysis based on a CSV file of weight ranges generated using the <code class="docutils literal notranslate"><span class="pre">weightrange</span></code>
+command, and the number of desired sensitivity trials. The command creates a CSV file in the output folder containing the
+sensitivity analysis results.</p>
+<p>For help on the inputs of this command, run the following:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">PyLandslide sensitivity --help</span>
+</pre></div>
+</div>
+<p>This results in the following, including three inputs:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">Usage: PyLandslide sensitivity [OPTIONS]</span>
+
+<span class="go">    Sensitivity of landslide hazard to weight uncertainty.</span>
+
+<span class="go">Options:</span>
+<span class="go">    -f, --file-name TEXT  JSON file containing the sensitivity config.</span>
+<span class="go">    -t, --trials INTEGER  Number of sensitivity trials.</span>
+<span class="go">    --help                Show this message and exit.</span>
+</pre></div>
+</div>
+<p>To use the <code class="docutils literal notranslate"><span class="pre">sensitivity</span></code> command, run the following and make sure to replace the inputs based on your case:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">PyLandslide sensitivity -f json_file.json -t 5</span>
+</pre></div>
+</div>
+<p>Further details on the structure and inputs to the JSON file are in the <a class="reference external" href="https://ierrg.github.io/PyLandslide/tutorial.html">Tutorials Section</a>.</p>
+</section>
 
 
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="modules.html" class="btn btn-neutral float-left" title="PyLandslide Python API" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="generated/PyLandslide.data_preparation.html" class="btn btn-neutral float-right" title="PyLandslide.data_preparation" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="mldata.html" class="btn btn-neutral float-left" title="The “mldata” command" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="weightrange.html" class="btn btn-neutral float-right" title="The “weightrange” command" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

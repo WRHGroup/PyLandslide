@@ -1,0 +1,26 @@
+Available commands
+-------------------
+
+After installing PyLandslide, to know which commands are available through the Command Line Interface (CLI), run the following:
+
+.. code-block:: console
+
+    PyLandslide --help
+
+This results in the following, which shows six available commands available through the Command Line Interface (CLI):
+
+.. code-block:: console
+
+    Options:
+        --help  Show this message and exit.
+
+    Commands:
+        compare      Compare two landslide hazard raster file.
+        coregister   Align raster data before using them.
+        generate     Generate a landslide hazard layer based on a sensitivity trial.
+        mldata       Prepare features and targets data for ML.
+        sensitivity  Sensitivity of landslide hazard to weight uncertainty.
+        weightrange  Determine weight range based on ML.
+
+Next is a description of how to use each these commands and the inputs needed.
+

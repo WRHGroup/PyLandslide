@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>PyLandslide.sensitivity.SensitivityEstimator &mdash; Pylandslide documentation 0.0.5 documentation</title>
+  <title>PyLandslide.sensitivity.SensitivityEstimator &mdash; PyLandslide Documentation 0.0.5 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -18,9 +18,7 @@
         <script src="../_static/sphinx_highlight.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
-    <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="PyLandslide.weightrange.WeightRangeEstimator" href="PyLandslide.weightrange.WeightRangeEstimator.html" />
-    <link rel="prev" title="PyLandslide.data_preparation.DataPreparation" href="PyLandslide.data_preparation.DataPreparation.html" /> 
+    <link rel="search" title="Search" href="../search.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -32,7 +30,7 @@
           
           
           <a href="../index.html" class="icon icon-home">
-            Pylandslide documentation
+            PyLandslide Documentation
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
@@ -43,20 +41,14 @@
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
-<ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="../summary.html">Summary</a></li>
-<li class="toctree-l1 current"><a class="reference internal" href="../modules.html">PyLandslide</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="../PyLandslide.html">Data Preparation</a></li>
-<li class="toctree-l2 current"><a class="reference internal" href="../PyLandslide.html#sensitivity-analysis">Sensitivity Analysis</a><ul class="current">
-<li class="toctree-l3 current"><a class="current reference internal" href="#">PyLandslide.sensitivity.SensitivityEstimator</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#PyLandslide.sensitivity.SensitivityEstimator"><code class="docutils literal notranslate"><span class="pre">SensitivityEstimator</span></code></a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="../PyLandslide.html#weight-uncertainty-analayis">Weight Uncertainty Analayis</a></li>
-</ul>
-</li>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../command_line.html">Command Line Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules.html">PyLandslide Python API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../license.html">License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../citation.html">Citation</a></li>
 </ul>
 
         </div>
@@ -65,7 +57,7 @@
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../index.html">Pylandslide documentation</a>
+          <a href="../index.html">PyLandslide Documentation</a>
       </nav>
 
       <div class="wy-nav-content">
@@ -73,8 +65,6 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
-          <li class="breadcrumb-item"><a href="../modules.html">PyLandslide</a></li>
-          <li class="breadcrumb-item"><a href="../PyLandslide.html">Data Preparation</a></li>
       <li class="breadcrumb-item active">PyLandslide.sensitivity.SensitivityEstimator</li>
       <li class="wy-breadcrumbs-aside">
             <a href="../_sources/generated/PyLandslide.sensitivity.SensitivityEstimator.rst.txt" rel="nofollow"> View page source</a>
@@ -90,58 +80,67 @@
 <dl class="py class">
 <dt class="sig sig-object py" id="PyLandslide.sensitivity.SensitivityEstimator">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">PyLandslide.sensitivity.</span></span><span class="sig-name descname"><span class="pre">SensitivityEstimator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">json_file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">trials</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PyLandslide/sensitivity.html#SensitivityEstimator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyLandslide.sensitivity.SensitivityEstimator" title="Permalink to this definition"></a></dt>
-<dd><dl class="py method">
+<dd><p>This class includes methods for performing sensitivity analyses based on the output CSV file of the weight range
+analysis plus generating and comparing landslide susceptibility raster layers.</p>
+<dl class="py method">
 <dt class="sig sig-object py" id="PyLandslide.sensitivity.SensitivityEstimator.__init__">
 <span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">json_file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">trials</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PyLandslide/sensitivity.html#SensitivityEstimator.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyLandslide.sensitivity.SensitivityEstimator.__init__" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Initialise a new SensitivityEstimator object.</p>
+<dl>
+<dt>Args:</dt><dd><p>json_file: JSON-based document specifying the configuration information for performing weight range
+calculation.</p>
+<p>trials: the number of desired sensitivity trials (or iterations).</p>
+</dd>
+</dl>
+</dd></dl>
 
 <p class="rubric">Methods</p>
 <table class="autosummary longtable docutils align-default">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="#PyLandslide.sensitivity.SensitivityEstimator.__init__" title="PyLandslide.sensitivity.SensitivityEstimator.__init__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__init__</span></code></a>(json_file[, trials])</p></td>
-<td><p></p></td>
+<td><p>Initialise a new SensitivityEstimator object.</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">check_class_upper_and_lower_bounds</span></code>(upper, lower)</p></td>
-<td><p></p></td>
+<td><p>Takes a lists the upper and lower bounds of susceptibility classes and checks that all lower bounds are lower than the upper bounds.</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">compare</span></code>(layer1, layer2)</p></td>
-<td><p></p></td>
+<td><p>Compares two susceptibility raster layers by calculating the percentage area within each susceptibility class and generating a raster layer of layer1 minus layer2.</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">create_results_dict</span></code>()</p></td>
-<td><p></p></td>
+<td><p>Creates a dictionary for saving the results of the execute() method.</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">execute</span></code>()</p></td>
-<td><p></p></td>
+<td><p>Performs a sensitivity analysis based on the weights CSV file and specified in the JSON-based document and the number of trials and creates a CSV file in the outputs folder containing the sensitivity results.</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">factor_data_preperation</span></code>(factors)</p></td>
-<td><p></p></td>
+<td><p>Takes a list of dictionaries that include factor names and their associated raster files and returns lists of factor keys, names, files, geo profiles, and datasets.</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">generate</span></code>(index, csv_sensitivity)</p></td>
-<td><p></p></td>
+<td><p>Generates a susceptibility raster layer using the generate_layer method, an input sensitivity CSV file, and the index of the desired trial for raster generation.</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">generate_layer</span></code>(factor_weights, suffex)</p></td>
-<td><p></p></td>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">generate_layer</span></code>(factor_weights, suffix)</p></td>
+<td><p>Overlays the factor layers based on a set of weights and writes a resulting raster layer into teh output directory specified in the JSON-based document.</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">generate_random_weights</span></code>(input_pd_table, ...)</p></td>
-<td><p></p></td>
+<td><p>Selects a random set of weights from the weight range CSV file.</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">load_data_from_json</span></code>(**kwargs)</p></td>
-<td><p>Load data from a file</p></td>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">load_data_from_json</span></code>()</p></td>
+<td><p>Loads the configuration JSON-based document assigned to self.json_file.</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">load_weight_csv_sensitivity_file</span></code>(sens_csv)</p></td>
-<td><p></p></td>
+<td><p>Loads the weight range CSV file into a Pandas dataframe and returns the dataframe and its number of rows.</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">number_of_pixels_in_susceptibility_classes</span></code>(...)</p></td>
-<td><p></p></td>
+<td><p>Takes a raster as an array and computes the percentage of pixels within each susceptibility class as specified in the JSON-based document and returns a list of the percentages.</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">overlay_factors</span></code>(factor_weights)</p></td>
-<td><p></p></td>
+<td><p>Overlays the factor layers based on their weights and returns a list of the percentage areas within each susceptibility class.</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">setup</span></code>()</p></td>
-<td><p></p></td>
+<td><p>Calls the load_data_from_json method to extract the information provided in the JSON-based document.</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">susceptibility_classes_data_preperation</span></code>(...)</p></td>
-<td><p></p></td>
+<td><p>Takes a list of dictionaries that include susceptibility class names and their ranges and returns lists of class names, lower bounds, and upper bounds.</p></td>
 </tr>
 </tbody>
 </table>
@@ -152,10 +151,7 @@
 
            </div>
           </div>
-          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="PyLandslide.data_preparation.DataPreparation.html" class="btn btn-neutral float-left" title="PyLandslide.data_preparation.DataPreparation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="PyLandslide.weightrange.WeightRangeEstimator.html" class="btn btn-neutral float-right" title="PyLandslide.weightrange.WeightRangeEstimator" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
-    </div>
+          <footer>
 
   <hr/>
 

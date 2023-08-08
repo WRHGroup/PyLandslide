@@ -11,7 +11,7 @@ What does PyLandslide offer?
 ----------------------------
 
 Currently, PyLandslide provides the following functionalities:
- * Data preparation tools that enable co-registration of rasters data of factors contributing to the occurrence of landslides. Also, this part of the tool provides the ability to extract of the data used for uncertainty analysis based on Machine Learning.
- * Using machine learning to determine the weights to combine factors contributing to the occurrence of landslides and the associated uncertainty ranges.
+ * Data preparation tools that enable co-registration of the raster data of factors contributing to the occurrence of landslides. Also, this part of the tool provides the ability to extract the data used for uncertainty analysis based on Machine Learning.
+ * Using machine learning to determine the weights to combine the factors contributing to the occurrence of landslides and the associated uncertainty ranges.
  * Conduct a sensitivity analysis of landslide susceptibility based on uncertainty ranges.
  * Generate and compare landslide susceptibility raster layers for any weight combinations tested in the sensitivity analysis.

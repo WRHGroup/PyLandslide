@@ -22,14 +22,6 @@ def mldata(file_name):
     WeightRangePreparationModel.setup()
     WeightRangePreparationModel.extract()
 
-@cli.command(name='weightrange', help="Determine weight range based on ML.")
-@click.option('-f', '--file-name', type=str, default="2_weight_range_json_file.json", help="JSON file containing the weight range config.")
-def weightrange(file_name):
-    logger.info('Starting the process.')
-    WeightRangeModel = WeightRangeEstimator(json_file=file_name)
-    WeightRangeModel.setup()
-    WeightRangeModel.calculate_weight_range()
-
 @cli.command(name='coregister', help="Align raster data before using them.")
 @click.option('-f', '--folder-name', type=str, default="raster_data", help="Folder containing the raster data.")
 def coregister(folder_name):
@@ -37,6 +29,14 @@ def coregister(folder_name):
     CoRegisterModel = DataPreparation(folder_name=folder_name)
     CoRegisterModel.adjust()
     CoRegisterModel.align()
+
+@cli.command(name='weightrange', help="Determine weight range based on ML.")
+@click.option('-f', '--file-name', type=str, default="2_weight_range_json_file.json", help="JSON file containing the weight range config.")
+def weightrange(file_name):
+    logger.info('Starting the process.')
+    WeightRangeModel = WeightRangeEstimator(json_file=file_name)
+    WeightRangeModel.setup()
+    WeightRangeModel.calculate_weight_range()
 
 @cli.command(name='sensitivity', help="Sensitivity of landslide hazard to weight uncertainty.")
 @click.option('-f', '--file-name', type=str, default="3_sensitivity_json_file_historical_rainfall.json", help="JSON file containing the sensitivity config.")

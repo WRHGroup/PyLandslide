@@ -1,0 +1,33 @@
+The "compare" command
+----------------------
+This command is used to compare two susceptibility raster layers by calculating the percentage area within each susceptibility class
+and generating a raster layer of the difference between the two input layers.
+
+For help on the inputs of this command, run the following:
+
+.. code-block:: console
+
+    PyLandslide compare --help
+
+This results in the following, including three inputs:
+
+.. code-block:: console
+
+    Usage: PyLandslide compare [OPTIONS]
+
+        Compare two landslide hazard raster file.
+
+    Options:
+        -f, --file-name TEXT  JSON file containing the sensitivity config.
+        -l1, --layer1 TEXT    First landslide hazard raster file.
+        -l2, --layer2 TEXT    Second landslide hazard raster file.
+        --help                Show this message and exit.
+
+To use the ``compare`` command, run the following and make sure to replace the inputs based on your case:
+
+.. code-block:: console
+
+    PyLandslide compare -f json_file.json -l1 layer1.tif -l2 layer2.tif
+
+Further details on the structure and inputs to the JSON file are in the `Tutorials Section <https://ierrg.github.io/PyLandslide/tutorial.html>`_.
+

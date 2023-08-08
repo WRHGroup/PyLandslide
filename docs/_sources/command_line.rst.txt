@@ -1,0 +1,13 @@
+Command Line Interface
+=======================
+
+.. toctree::
+   :maxdepth: 2
+   
+   available_commands
+   compare
+   coregister
+   generate
+   mldata
+   sensitivity
+   weightrange

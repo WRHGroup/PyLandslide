@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>PyLandslide.sensitivity &mdash; Pylandslide documentation 0.0.5 documentation</title>
+  <title>PyLandslide.sensitivity &mdash; PyLandslide Documentation 0.0.5 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -29,7 +29,7 @@
           
           
           <a href="../../index.html" class="icon icon-home">
-            Pylandslide documentation
+            PyLandslide Documentation
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
@@ -41,8 +41,13 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../summary.html">Summary</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../modules.html">PyLandslide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../command_line.html">Command Line Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorial.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../modules.html">PyLandslide Python API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../license.html">License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../citation.html">Citation</a></li>
 </ul>
 
         </div>
@@ -51,7 +56,7 @@
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../../index.html">Pylandslide documentation</a>
+          <a href="../../index.html">PyLandslide Documentation</a>
       </nav>
 
       <div class="wy-nav-content">
@@ -86,13 +91,31 @@
 
 
 <div class="viewcode-block" id="SensitivityEstimator"><a class="viewcode-back" href="../../generated/PyLandslide.sensitivity.SensitivityEstimator.html#PyLandslide.sensitivity.SensitivityEstimator">[docs]</a><span class="k">class</span> <span class="nc">SensitivityEstimator</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This class includes methods for performing sensitivity analyses based on the output CSV file of the weight range</span>
+<span class="sd">    analysis plus generating and comparing landslide susceptibility raster layers.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
 <div class="viewcode-block" id="SensitivityEstimator.__init__"><a class="viewcode-back" href="../../generated/PyLandslide.sensitivity.SensitivityEstimator.html#PyLandslide.sensitivity.SensitivityEstimator.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">json_file</span><span class="p">,</span> <span class="n">trials</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initialise a new SensitivityEstimator object.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            json_file: JSON-based document specifying the configuration information for performing weight range</span>
+<span class="sd">            calculation.</span>
+
+<span class="sd">            trials: the number of desired sensitivity trials (or iterations).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">json_file</span> <span class="o">=</span> <span class="n">json_file</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">trials</span> <span class="o">=</span> <span class="n">trials</span></div>
 
-    <span class="k">def</span> <span class="nf">load_data_from_json</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Load data from a file</span>
+    <span class="k">def</span> <span class="nf">load_data_from_json</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Loads the configuration JSON-based document assigned to self.json_file. Extracts the data from the JSON-based</span>
+<span class="sd">        document and assign them to self.factors, self.susceptibility_classes, self.output_directory, and</span>
+<span class="sd">        self.weight_csv_sensitivity_file.</span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">data</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">normpath</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">(),</span> <span class="bp">self</span><span class="o">.</span><span class="n">json_file</span><span class="p">))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">json_file_directory</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">normpath</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">data</span><span class="p">))</span>
@@ -121,6 +144,10 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">weight_csv_sensitivity_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">normpath</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">json_file_directory</span><span class="p">,</span> <span class="n">loaded_file</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;weight_csv_sensitivity_file&#39;</span><span class="p">)))</span>
 
     <span class="k">def</span> <span class="nf">factor_data_preperation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">factors</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Takes a list of dictionaries that include factor names and their associated raster files and returns</span>
+<span class="sd">        lists of factor keys, names, files, geo profiles, and datasets.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">keys</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">names</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">files</span> <span class="o">=</span> <span class="p">[]</span>
@@ -138,6 +165,10 @@
         <span class="k">return</span> <span class="n">keys</span><span class="p">,</span> <span class="n">names</span><span class="p">,</span> <span class="n">files</span><span class="p">,</span> <span class="n">profiles</span><span class="p">,</span> <span class="n">raster_sets</span>
 
     <span class="k">def</span> <span class="nf">susceptibility_classes_data_preperation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">susceptibility_classes</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Takes a list of dictionaries that include susceptibility class names and their ranges and returns lists of class</span>
+<span class="sd">        names, lower bounds, and upper bounds.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">names</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">class_upper_bounds</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">class_lower_bounds</span> <span class="o">=</span> <span class="p">[]</span>
@@ -148,11 +179,18 @@
         <span class="k">return</span> <span class="n">names</span><span class="p">,</span> <span class="n">class_lower_bounds</span><span class="p">,</span> <span class="n">class_upper_bounds</span>
 
     <span class="k">def</span> <span class="nf">check_class_upper_and_lower_bounds</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">upper</span><span class="p">,</span> <span class="n">lower</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Takes a lists the upper and lower bounds of susceptibility classes and checks that all lower bounds are lower</span>
+<span class="sd">        than the upper bounds.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">for</span> <span class="n">v</span><span class="p">,</span><span class="n">vv</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">upper</span><span class="p">):</span>
             <span class="k">if</span> <span class="n">lower</span><span class="p">[</span><span class="n">v</span><span class="p">]</span><span class="o">&gt;=</span> <span class="n">upper</span><span class="p">[</span><span class="n">v</span><span class="p">]:</span>
                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;class_upper_bound for each factor must be greater than class_lower_bound&#39;</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">create_results_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Creates a dictionary for saving the results of the execute() method.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">results_dic</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">susceptibility_classes_names</span><span class="p">:</span>
             <span class="n">results_dic</span><span class="p">[</span><span class="n">n</span><span class="p">]</span><span class="o">=</span><span class="p">[]</span>
@@ -161,6 +199,9 @@
         <span class="k">return</span> <span class="n">results_dic</span>
 
     <span class="k">def</span> <span class="nf">generate_random_weights</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_pd_table</span><span class="p">,</span> <span class="n">data_length</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Selects a random set of weights from the weight range CSV file.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">random_weights</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">random_ix</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="p">(</span><span class="n">data_length</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span>
         <span class="k">for</span> <span class="n">nx</span><span class="p">,</span> <span class="n">name</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">factor_names</span><span class="p">):</span>
@@ -168,12 +209,19 @@
         <span class="k">return</span> <span class="n">random_weights</span>
 
     <span class="k">def</span> <span class="nf">load_weight_csv_sensitivity_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sens_csv</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Loads the weight range CSV file into a Pandas dataframe and returns the dataframe and its number of rows.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">csv_file</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">sens_csv</span><span class="p">)</span>
         <span class="n">csv_file</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;id&#39;</span>
         <span class="n">number_of_rows</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">csv_file</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">csv_file</span><span class="p">,</span> <span class="n">number_of_rows</span>
 
     <span class="k">def</span> <span class="nf">overlay_factors</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">factor_weights</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Overlays the factor layers based on their weights and returns a list of the percentage areas within each</span>
+<span class="sd">        susceptibility class.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Overlaying factors...&quot;</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">rx</span><span class="p">,</span> <span class="n">raster</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">raster_sets</span><span class="p">):</span>
             <span class="k">if</span> <span class="n">rx</span><span class="o">==</span><span class="mi">0</span><span class="p">:</span>
@@ -183,7 +231,12 @@
         <span class="n">susceptibility_class_pixels</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">number_of_pixels_in_susceptibility_classes</span><span class="p">(</span><span class="n">susceptibility_raster</span><span class="o">=</span><span class="n">overlayed</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">susceptibility_class_pixels</span>
 
-    <span class="k">def</span> <span class="nf">generate_layer</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">factor_weights</span><span class="p">,</span> <span class="n">suffex</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">generate_layer</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">factor_weights</span><span class="p">,</span> <span class="n">suffix</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Overlays the factor layers based on a set of weights and writes a resulting raster layer into teh output</span>
+<span class="sd">        directory specified in the JSON-based document. The name of the resulting raster layer has a suffix provided as</span>
+<span class="sd">        an input to the method.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Generating layer by overlaying factors...&quot;</span><span class="p">)</span>
         <span class="n">sum_max_weight</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="k">for</span> <span class="n">rx</span><span class="p">,</span> <span class="n">raster</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">raster_sets</span><span class="p">):</span>
@@ -193,10 +246,14 @@
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">overlayed</span> <span class="o">+=</span> <span class="n">raster</span> <span class="o">*</span> <span class="n">factor_weights</span><span class="p">[</span><span class="n">rx</span><span class="p">]</span>
         <span class="n">profile</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">profiles</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-        <span class="k">with</span> <span class="n">rasterio</span><span class="o">.</span><span class="n">open</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="o">+</span><span class="s2">&quot;/susceptibility_&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">suffex</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot;.tif&quot;</span><span class="p">),</span> <span class="s1">&#39;w&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">profile</span><span class="p">)</span> <span class="k">as</span> <span class="n">dst</span><span class="p">:</span>
+        <span class="k">with</span> <span class="n">rasterio</span><span class="o">.</span><span class="n">open</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="o">+</span><span class="s2">&quot;/susceptibility_&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">suffix</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot;.tif&quot;</span><span class="p">),</span> <span class="s1">&#39;w&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">profile</span><span class="p">)</span> <span class="k">as</span> <span class="n">dst</span><span class="p">:</span>
             <span class="n">dst</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">overlayed</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">number_of_pixels_in_susceptibility_classes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">susceptibility_raster</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Takes a raster as an array and computes the percentage of pixels within each susceptibility class as specified</span>
+<span class="sd">        in the JSON-based document and returns a list of the percentages.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Classifying pixels based on susceptibility ranges&quot;</span><span class="p">)</span>
         <span class="n">class_pixels</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">susceptibility_classes_names</span><span class="p">:</span>
@@ -210,6 +267,10 @@
         <span class="k">return</span> <span class="n">class_pixels</span>
 
     <span class="k">def</span> <span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Performs a sensitivity analysis based on the weights CSV file and specified in the JSON-based document</span>
+<span class="sd">        and the number of trials and creates a CSV file in the outputs folder containing the sensitivity results.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">factor_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">factor_data_preperation</span><span class="p">(</span><span class="n">factors</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">factors</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">factor_weight_keys</span> <span class="o">=</span> <span class="n">factor_data</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">factor_names</span> <span class="o">=</span> <span class="n">factor_data</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
@@ -254,10 +315,18 @@
             <span class="n">final_result_pd</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">fn</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">setup</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Calls the load_data_from_json method to extract the information provided in the JSON-based document.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Setting up SensitivityEstimator...&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">load_data_from_json</span><span class="p">()</span>
 
     <span class="k">def</span> <span class="nf">generate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="n">csv_sensitivity</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Generates a susceptibility raster layer using the generate_layer method, an input sensitivity CSV file, and the</span>
+<span class="sd">        index of the desired trial for raster generation. The resulting raster file is saved into the output directory</span>
+<span class="sd">        and uses the index as a name suffix.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;generating road susceptibility raster layer...&quot;</span><span class="p">)</span>
         <span class="n">csv_file</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">,</span> <span class="n">csv_sensitivity</span><span class="p">))</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s1">&#39;id&#39;</span><span class="p">)</span>
         
@@ -271,11 +340,15 @@
         <span class="k">for</span> <span class="n">w</span><span class="p">,</span> <span class="n">ww</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">factor_weight_keys</span><span class="p">):</span>
             <span class="n">weight_inputs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">csv_file</span><span class="o">.</span><span class="n">at</span><span class="p">[</span><span class="n">index</span><span class="p">,</span> <span class="n">ww</span><span class="p">])</span>
         
-        <span class="bp">self</span><span class="o">.</span><span class="n">generate_layer</span><span class="p">(</span><span class="n">factor_weights</span><span class="o">=</span><span class="n">weight_inputs</span><span class="p">,</span> <span class="n">suffex</span><span class="o">=</span><span class="n">index</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">generate_layer</span><span class="p">(</span><span class="n">factor_weights</span><span class="o">=</span><span class="n">weight_inputs</span><span class="p">,</span> <span class="n">suffix</span><span class="o">=</span><span class="n">index</span><span class="p">)</span>
 
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Layer generated successfully.&quot;</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">compare</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">layer1</span><span class="p">,</span> <span class="n">layer2</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Compares two susceptibility raster layers by calculating the percentage area within each susceptibility class</span>
+<span class="sd">        and generating a raster layer of layer1 minus layer2. The difference layer is saved into the output directory.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;comparing&quot;</span><span class="p">,</span><span class="n">layer1</span><span class="p">,</span><span class="s2">&quot;and&quot;</span><span class="p">,</span><span class="n">layer2</span><span class="p">,</span><span class="s2">&quot;...&quot;</span><span class="p">)</span>
 
         <span class="k">with</span> <span class="n">rasterio</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">,</span><span class="n">layer1</span><span class="p">))</span> <span class="k">as</span> <span class="n">rf</span><span class="p">:</span>
