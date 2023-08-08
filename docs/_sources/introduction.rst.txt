@@ -15,3 +15,7 @@ Currently, PyLandslide provides the following functionalities:
  * Using machine learning to determine the weights to combine the factors contributing to the occurrence of landslides and the associated uncertainty ranges.
  * Conduct a sensitivity analysis of landslide susceptibility based on uncertainty ranges.
  * Generate and compare landslide susceptibility raster layers for any weight combinations tested in the sensitivity analysis.
+
+.. image:: https://raw.githubusercontent.com/IERRG/PyLandslide/main/docs/figs/frm.png
+   :width: 750px
+   

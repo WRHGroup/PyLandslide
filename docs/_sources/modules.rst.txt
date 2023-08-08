@@ -7,7 +7,7 @@ Unified Modelling Language Class Diagram
    :width: 750px
 
 Classes and methods description
--------------------------------
+--------------------------------
 
 .. toctree::
    :maxdepth: 2
