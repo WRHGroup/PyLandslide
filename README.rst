@@ -9,7 +9,7 @@ Introduction
 
 For details on how to install and use the tool, please refer to the `Documentation <https://ierrg.github.io/PyLandslide/>`__.
 
-PyLandslide is a tool for spatial mapping of landslide susceptibility. The tool uses “qualitative map combination,” in which the effects of multiple factors that contribute to landslide occurrence are combined using weights. The tool uses Machine learning to determine weights and their uncertainties. The tool is also designed to conduct sensitivity analysis based on weight ranges and spatially compare the outcomes of different weight choices.
+PyLandslide is a tool for spatial mapping of landslide susceptibility. The tool uses "qualitative map combination," in which the effects of multiple factors that contribute to landslide occurrence are combined using weights. The tool uses Machine learning to determine weights and their uncertainties. The tool is also designed to conduct sensitivity analysis based on weight ranges and spatially compare the outcomes of different weight choices.
 
 Landslide susceptibility and uncertainty analysis can be performed in PyLandslide either through high-level commands or using Python code. Either way, some inputs to different methods and functionalities need to be provided through JSON-based document format. The `Documentation <https://ierrg.github.io/PyLandslide/>`__ page provides further details on how to use the tool and provide the required inputs.
 
