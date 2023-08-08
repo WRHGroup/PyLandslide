@@ -13,6 +13,9 @@ PyLandslide is a tool for spatial mapping of landslide susceptibility. The tool 
 
 Landslide susceptibility and uncertainty analysis can be performed in PyLandslide either through high-level commands or using Python code. Either way, some inputs to different methods and functionalities need to be provided through JSON-based document format. The `Documentation <https://ierrg.github.io/PyLandslide/>`__ page provides further details on how to use the tool and provide the required inputs.
 
+.. image:: https://raw.githubusercontent.com/IERRG/PyLandslide/main/docs/figs/frm.jpg
+   :width: 750px
+
 Installation
 ============
 
