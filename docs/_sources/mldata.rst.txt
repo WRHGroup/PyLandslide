@@ -1,0 +1,32 @@
+The "mldata" command
+-----------------------
+This command is used to extract the factor values at the landslide and non-landslide locations. These locations are obtained from a
+shapefiles provided in a JSON-based document. The results are saved into features.csv (factor values) and targets.csv
+(landslide or non-landslide status) in the output directory specified in the JSON-based document.
+
+For help on the inputs of this command, run the following:
+
+.. code-block:: console
+
+    PyLandslide mldata --help
+
+This results in the following, including three inputs:
+
+.. code-block:: console
+
+    Usage: PyLandslide mldata [OPTIONS]
+
+        Prepare features and targets data for ML.
+
+    Options:
+        -f, --file-name TEXT  JSON file containing the data preparation config.
+        --help                Show this message and exit.
+
+To use the ``mldata`` command, run the following and make sure to replace the inputs based on your case:
+
+.. code-block:: console
+
+    PyLandslide mldata -f  json_file.json
+
+Further details on the structure and inputs to the JSON file are in the `Tutorials Section <https://ierrg.github.io/PyLandslide/tutorial.html>`_.
+

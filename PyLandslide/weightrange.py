@@ -9,12 +9,28 @@ from sklearn.metrics import confusion_matrix
 logger = logging.getLogger(__name__)
 
 class WeightRangeEstimator(object):
+    """
+    This class includes methods for calculating weight ranges of factors contributing to the occurrence of
+    landslides based on Machine Learning.
+    """
+
     def __init__(self, json_file, *args, **kwargs):
+        """
+        Initialise a new WeightRangeEstimator object.
+
+        Args:
+            json_file: JSON-based document specifying the configuration information for performing weight range
+            calculation.
+        """
         super().__init__(*args, **kwargs)
         self.json_file = json_file
 
-    def load_data_from_json(self, **kwargs):
-        """Load data from a file -
+    def load_data_from_json(self):
+        """
+        Loads the configuration JSON-based document assigned to self.json_file. Extracts the data from the JSON-based
+        document and assign them to self.features_file, self.targets_file, self.max_tree_depth, self.number_trees,
+        self.output_file, self.size_testing_sample, self.number_of_iterations, self.cores, and self.performance_cutoff.
+
         """
         data = os.path.normpath(os.path.join(os.getcwd(), self.json_file))
         self.json_file_directory = os.path.normpath(os.path.dirname(data))
@@ -75,11 +91,22 @@ class WeightRangeEstimator(object):
             self.performance_cutoff = loaded_file.pop('performance_cutoff')
 
     def load_data_from_csv(self, filename, index_column):
+        """
+        Loads a CSV file into a Pandas dataframe. Takes the file name and index column as inputs. This method is used to
+        load the features and targets CSV files for Machine Learning.
+
+        """
         temp = pd.read_csv(filename)
         input_data = temp.set_index(index_column)
         return input_data
 
     def calculate_weight_range(self):
+        """
+        Uses Random Forest Classification Machine Learning Models to estimate weight ranges of the factors contributing
+        to the occurrence of landslides. The data required for this method are provided and loaded from the JSON-based
+        document. The results are written to a CSV file specified in the JSON-based document.
+
+        """
         targets_df = self.load_data_from_csv(self.targets_file, index_column = 'id')
         features_df = self.load_data_from_csv(self.features_file, index_column = 'id')
 
@@ -118,6 +145,11 @@ class WeightRangeEstimator(object):
         results.dropna(how='all').to_csv(self.output_file)
 
     def feature_importance_model(self, targets, features, max_tree_depth, n_estimators, cores):
+        """
+        Trains a Random Forest Classification Model and returns the model and the associated feature importance list.
+        This method takes targets, features,  maximum tree depth, number of trees, and number of processing cores as inputs.
+
+        """
         #create a RandomForestClassifier 
         model = RandomForestClassifier(random_state=1, max_depth=max_tree_depth, n_estimators = n_estimators, n_jobs = cores)
         model.fit(features,targets)
@@ -126,6 +158,11 @@ class WeightRangeEstimator(object):
         return importance, model
         
     def overall_accuracy(self, mod,X_train,Y_train,X_test,Y_test):
+        """
+        Calculates the Overall Accuracy metric of a Machine Learning model for the testing and training data. This
+        method takes the Machine Learning Model and the training and testing data as inputs.
+
+        """
         Y_predicted_test = mod.predict(X_test)
         Y_predicted_train = mod.predict(X_train)
 
@@ -159,5 +196,8 @@ class WeightRangeEstimator(object):
         return overall_accuracy_train, overall_accuracy_test
 
     def setup(self):
+        """
+        Calls the load_data_from_json method to extract the information provided in the JSON-based document.
+        """
         self.load_data_from_json()
         logger.info('Setting up WeightRangeEstimator based on the file: "{}"'.format(self.json_file))

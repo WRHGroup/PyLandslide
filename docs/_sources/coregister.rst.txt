@@ -1,0 +1,31 @@
+The "coregister" command
+-------------------------
+This command converts raster files of the factors contributing to the occurrence of landslides to uint8 to reduce their size, and then
+co-registers them to ensure that all rasters are aligned, have the same resolution, and same array dimensions.
+
+For help on the inputs of this command, run the following:
+
+.. code-block:: console
+
+    PyLandslide coregister --help
+
+This results in the following, including one input:
+
+.. code-block:: console
+
+    Usage: PyLandslide coregister [OPTIONS]
+
+        Align raster data before using them.
+
+    Options:
+        -f, --folder-name TEXT  Folder containing the raster data.
+        --help                  Show this message and exit.
+
+To use the ``coregister`` command, run the following and make sure to replace the inputs based on your case:
+
+.. code-block:: console
+
+    PyLandslide coregister -f raster_data
+
+The resulting co-registered rasters are saved into a folder named ``raster_data/alinged_rasters``.
+

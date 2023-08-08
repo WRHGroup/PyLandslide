@@ -14,13 +14,31 @@ logger = logging.getLogger(__name__)
 
 
 class SensitivityEstimator(object):
+    """
+    This class includes methods for performing sensitivity analyses based on the output CSV file of the weight range
+    analysis plus generating and comparing landslide susceptibility raster layers.
+    """
+
     def __init__(self, json_file, trials=5, *args, **kwargs):
+        """
+        Initialise a new SensitivityEstimator object.
+
+        Args:
+            json_file: JSON-based document specifying the configuration information for performing weight range
+            calculation.
+
+            trials: the number of desired sensitivity trials (or iterations).
+        """
         super().__init__(*args, **kwargs)
         self.json_file = json_file
         self.trials = trials
 
-    def load_data_from_json(self, **kwargs):
-        """Load data from a file
+    def load_data_from_json(self):
+        """
+        Loads the configuration JSON-based document assigned to self.json_file. Extracts the data from the JSON-based
+        document and assign them to self.factors, self.susceptibility_classes, self.output_directory, and
+        self.weight_csv_sensitivity_file.
+
         """
         data = os.path.normpath(os.path.join(os.getcwd(), self.json_file))
         self.json_file_directory = os.path.normpath(os.path.dirname(data))
@@ -49,6 +67,10 @@ class SensitivityEstimator(object):
         self.weight_csv_sensitivity_file = os.path.normpath(os.path.join(self.json_file_directory, loaded_file.pop('weight_csv_sensitivity_file')))
 
     def factor_data_preperation(self, factors):
+        """
+        Takes a list of dictionaries that include factor names and their associated raster files and returns
+        lists of factor keys, names, files, geo profiles, and datasets.
+        """
         keys = []
         names = []
         files = []
@@ -66,6 +88,10 @@ class SensitivityEstimator(object):
         return keys, names, files, profiles, raster_sets
 
     def susceptibility_classes_data_preperation(self, susceptibility_classes):
+        """
+        Takes a list of dictionaries that include susceptibility class names and their ranges and returns lists of class
+        names, lower bounds, and upper bounds.
+        """
         names = []
         class_upper_bounds = []
         class_lower_bounds = []
@@ -76,11 +102,18 @@ class SensitivityEstimator(object):
         return names, class_lower_bounds, class_upper_bounds
 
     def check_class_upper_and_lower_bounds(self, upper, lower):
+        """
+        Takes a lists the upper and lower bounds of susceptibility classes and checks that all lower bounds are lower
+        than the upper bounds.
+        """
         for v,vv in enumerate(upper):
             if lower[v]>= upper[v]:
                 raise ValueError('class_upper_bound for each factor must be greater than class_lower_bound')
 
     def create_results_dict(self):
+        """
+        Creates a dictionary for saving the results of the execute() method.
+        """
         results_dic = {}
         for n in self.susceptibility_classes_names:
             results_dic[n]=[]
@@ -89,6 +122,9 @@ class SensitivityEstimator(object):
         return results_dic
 
     def generate_random_weights(self, input_pd_table, data_length):
+        """
+        Selects a random set of weights from the weight range CSV file.
+        """
         random_weights = []
         random_ix = random.randint(0, (data_length-1))
         for nx, name in enumerate(self.factor_names):
@@ -96,12 +132,19 @@ class SensitivityEstimator(object):
         return random_weights
 
     def load_weight_csv_sensitivity_file(self, sens_csv):
+        """
+        Loads the weight range CSV file into a Pandas dataframe and returns the dataframe and its number of rows.
+        """
         csv_file = pd.read_csv(sens_csv)
         csv_file.index.name = 'id'
         number_of_rows = len(csv_file.index)
         return csv_file, number_of_rows
 
     def overlay_factors(self, factor_weights):
+        """
+        Overlays the factor layers based on their weights and returns a list of the percentage areas within each
+        susceptibility class.
+        """
         print("Overlaying factors...")
         for rx, raster in enumerate(self.raster_sets):
             if rx==0:
@@ -111,7 +154,12 @@ class SensitivityEstimator(object):
         susceptibility_class_pixels = self.number_of_pixels_in_susceptibility_classes(susceptibility_raster=overlayed)
         return susceptibility_class_pixels
 
-    def generate_layer(self, factor_weights, suffex):
+    def generate_layer(self, factor_weights, suffix):
+        """
+        Overlays the factor layers based on a set of weights and writes a resulting raster layer into teh output
+        directory specified in the JSON-based document. The name of the resulting raster layer has a suffix provided as
+        an input to the method.
+        """
         print("Generating layer by overlaying factors...")
         sum_max_weight = 0
         for rx, raster in enumerate(self.raster_sets):
@@ -121,10 +169,14 @@ class SensitivityEstimator(object):
             else:
                 overlayed += raster * factor_weights[rx]
         profile = self.profiles[0]
-        with rasterio.open((self.output_directory+"/susceptibility_"+str(suffex)+".tif"), 'w', **profile) as dst:
+        with rasterio.open((self.output_directory+"/susceptibility_"+str(suffix)+".tif"), 'w', **profile) as dst:
             dst.write(overlayed, 1)
 
     def number_of_pixels_in_susceptibility_classes(self, susceptibility_raster):
+        """
+        Takes a raster as an array and computes the percentage of pixels within each susceptibility class as specified
+        in the JSON-based document and returns a list of the percentages.
+        """
         print("Classifying pixels based on susceptibility ranges")
         class_pixels = []
         for i in self.susceptibility_classes_names:
@@ -138,6 +190,10 @@ class SensitivityEstimator(object):
         return class_pixels
 
     def execute(self):
+        """
+        Performs a sensitivity analysis based on the weights CSV file and specified in the JSON-based document
+        and the number of trials and creates a CSV file in the outputs folder containing the sensitivity results.
+        """
         factor_data = self.factor_data_preperation(factors=self.factors)
         self.factor_weight_keys = factor_data[0]
         self.factor_names = factor_data[1]
@@ -182,10 +238,18 @@ class SensitivityEstimator(object):
             final_result_pd.to_csv(fn)
 
     def setup(self):
+        """
+        Calls the load_data_from_json method to extract the information provided in the JSON-based document.
+        """
         print("Setting up SensitivityEstimator...")
         self.load_data_from_json()
 
     def generate(self, index, csv_sensitivity):
+        """
+        Generates a susceptibility raster layer using the generate_layer method, an input sensitivity CSV file, and the
+        index of the desired trial for raster generation. The resulting raster file is saved into the output directory
+        and uses the index as a name suffix.
+        """
         print("generating road susceptibility raster layer...")
         csv_file = pd.read_csv(os.path.join(self.output_directory, csv_sensitivity)).set_index('id')
         
@@ -199,11 +263,15 @@ class SensitivityEstimator(object):
         for w, ww in enumerate(self.factor_weight_keys):
             weight_inputs.append(csv_file.at[index, ww])
         
-        self.generate_layer(factor_weights=weight_inputs, suffex=index)
+        self.generate_layer(factor_weights=weight_inputs, suffix=index)
 
         print("Layer generated successfully.")
 
     def compare(self, layer1, layer2):
+        """
+        Compares two susceptibility raster layers by calculating the percentage area within each susceptibility class
+        and generating a raster layer of layer1 minus layer2. The difference layer is saved into the output directory.
+        """
         print("comparing",layer1,"and",layer2,"...")
 
         with rasterio.open(os.path.join(self.output_directory,layer1)) as rf:

@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>PyLandslide.weightrange &mdash; Pylandslide documentation 0.0.5 documentation</title>
+  <title>PyLandslide.weightrange &mdash; PyLandslide Documentation 0.0.5 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -29,7 +29,7 @@
           
           
           <a href="../../index.html" class="icon icon-home">
-            Pylandslide documentation
+            PyLandslide Documentation
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
@@ -41,8 +41,13 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../summary.html">Summary</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../modules.html">PyLandslide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../command_line.html">Command Line Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorial.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../modules.html">PyLandslide Python API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../license.html">License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../citation.html">Citation</a></li>
 </ul>
 
         </div>
@@ -51,7 +56,7 @@
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../../index.html">Pylandslide documentation</a>
+          <a href="../../index.html">PyLandslide Documentation</a>
       </nav>
 
       <div class="wy-nav-content">
@@ -81,12 +86,28 @@
 <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 
 <div class="viewcode-block" id="WeightRangeEstimator"><a class="viewcode-back" href="../../generated/PyLandslide.weightrange.WeightRangeEstimator.html#PyLandslide.weightrange.WeightRangeEstimator">[docs]</a><span class="k">class</span> <span class="nc">WeightRangeEstimator</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This class includes methods for calculating weight ranges of factors contributing to the occurrence of</span>
+<span class="sd">    landslides based on Machine Learning.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
 <div class="viewcode-block" id="WeightRangeEstimator.__init__"><a class="viewcode-back" href="../../generated/PyLandslide.weightrange.WeightRangeEstimator.html#PyLandslide.weightrange.WeightRangeEstimator.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">json_file</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initialise a new WeightRangeEstimator object.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            json_file: JSON-based document specifying the configuration information for performing weight range</span>
+<span class="sd">            calculation.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">json_file</span> <span class="o">=</span> <span class="n">json_file</span></div>
 
-    <span class="k">def</span> <span class="nf">load_data_from_json</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Load data from a file -</span>
+    <span class="k">def</span> <span class="nf">load_data_from_json</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Loads the configuration JSON-based document assigned to self.json_file. Extracts the data from the JSON-based</span>
+<span class="sd">        document and assign them to self.features_file, self.targets_file, self.max_tree_depth, self.number_trees,</span>
+<span class="sd">        self.output_file, self.size_testing_sample, self.number_of_iterations, self.cores, and self.performance_cutoff.</span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">data</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">normpath</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">(),</span> <span class="bp">self</span><span class="o">.</span><span class="n">json_file</span><span class="p">))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">json_file_directory</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">normpath</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">data</span><span class="p">))</span>
@@ -147,11 +168,22 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">performance_cutoff</span> <span class="o">=</span> <span class="n">loaded_file</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;performance_cutoff&#39;</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">load_data_from_csv</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">,</span> <span class="n">index_column</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Loads a CSV file into a Pandas dataframe. Takes the file name and index column as inputs. This method is used to</span>
+<span class="sd">        load the features and targets CSV files for Machine Learning.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">temp</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
         <span class="n">input_data</span> <span class="o">=</span> <span class="n">temp</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="n">index_column</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">input_data</span>
 
     <span class="k">def</span> <span class="nf">calculate_weight_range</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Uses Random Forest Classification Machine Learning Models to estimate weight ranges of the factors contributing</span>
+<span class="sd">        to the occurrence of landslides. The data required for this method are provided and loaded from the JSON-based</span>
+<span class="sd">        document. The results are written to a CSV file specified in the JSON-based document.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">targets_df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">load_data_from_csv</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">targets_file</span><span class="p">,</span> <span class="n">index_column</span> <span class="o">=</span> <span class="s1">&#39;id&#39;</span><span class="p">)</span>
         <span class="n">features_df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">load_data_from_csv</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">features_file</span><span class="p">,</span> <span class="n">index_column</span> <span class="o">=</span> <span class="s1">&#39;id&#39;</span><span class="p">)</span>
 
@@ -190,6 +222,11 @@
         <span class="n">results</span><span class="o">.</span><span class="n">dropna</span><span class="p">(</span><span class="n">how</span><span class="o">=</span><span class="s1">&#39;all&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">output_file</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">feature_importance_model</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">targets</span><span class="p">,</span> <span class="n">features</span><span class="p">,</span> <span class="n">max_tree_depth</span><span class="p">,</span> <span class="n">n_estimators</span><span class="p">,</span> <span class="n">cores</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Trains a Random Forest Classification Model and returns the model and the associated feature importance list.</span>
+<span class="sd">        This method takes targets, features,  maximum tree depth, number of trees, and number of processing cores as inputs.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1">#create a RandomForestClassifier </span>
         <span class="n">model</span> <span class="o">=</span> <span class="n">RandomForestClassifier</span><span class="p">(</span><span class="n">random_state</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">max_depth</span><span class="o">=</span><span class="n">max_tree_depth</span><span class="p">,</span> <span class="n">n_estimators</span> <span class="o">=</span> <span class="n">n_estimators</span><span class="p">,</span> <span class="n">n_jobs</span> <span class="o">=</span> <span class="n">cores</span><span class="p">)</span>
         <span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">features</span><span class="p">,</span><span class="n">targets</span><span class="p">)</span>
@@ -198,6 +235,11 @@
         <span class="k">return</span> <span class="n">importance</span><span class="p">,</span> <span class="n">model</span>
         
     <span class="k">def</span> <span class="nf">overall_accuracy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mod</span><span class="p">,</span><span class="n">X_train</span><span class="p">,</span><span class="n">Y_train</span><span class="p">,</span><span class="n">X_test</span><span class="p">,</span><span class="n">Y_test</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Calculates the Overall Accuracy metric of a Machine Learning model for the testing and training data. This</span>
+<span class="sd">        method takes the Machine Learning Model and the training and testing data as inputs.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">Y_predicted_test</span> <span class="o">=</span> <span class="n">mod</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
         <span class="n">Y_predicted_train</span> <span class="o">=</span> <span class="n">mod</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_train</span><span class="p">)</span>
 
@@ -231,6 +273,9 @@
         <span class="k">return</span> <span class="n">overall_accuracy_train</span><span class="p">,</span> <span class="n">overall_accuracy_test</span>
 
     <span class="k">def</span> <span class="nf">setup</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Calls the load_data_from_json method to extract the information provided in the JSON-based document.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">load_data_from_json</span><span class="p">()</span>
         <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Setting up WeightRangeEstimator based on the file: &quot;</span><span class="si">{}</span><span class="s1">&quot;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">json_file</span><span class="p">))</span></div>
 </pre></div>

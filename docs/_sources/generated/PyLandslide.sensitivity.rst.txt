@@ -1,0 +1,29 @@
+﻿PyLandslide.sensitivity
+=======================
+
+.. automodule:: PyLandslide.sensitivity
+
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      SensitivityEstimator
+   
+   
+
+   
+   
+   
+
+
+

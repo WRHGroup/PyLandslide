@@ -1,0 +1,33 @@
+The "sensitivity" command
+--------------------------
+This command is used to perform a sensitivity analysis based on a CSV file of weight ranges generated using the ``weightrange``
+command, and the number of desired sensitivity trials. The command creates a CSV file in the output folder containing the
+sensitivity analysis results.
+
+For help on the inputs of this command, run the following:
+
+.. code-block:: console
+
+    PyLandslide sensitivity --help
+
+This results in the following, including three inputs:
+
+.. code-block:: console
+
+    Usage: PyLandslide sensitivity [OPTIONS]
+
+        Sensitivity of landslide hazard to weight uncertainty.
+
+    Options:
+        -f, --file-name TEXT  JSON file containing the sensitivity config.
+        -t, --trials INTEGER  Number of sensitivity trials.
+        --help                Show this message and exit.
+
+To use the ``sensitivity`` command, run the following and make sure to replace the inputs based on your case:
+
+.. code-block:: console
+
+    PyLandslide sensitivity -f json_file.json -t 5
+
+Further details on the structure and inputs to the JSON file are in the `Tutorials Section <https://ierrg.github.io/PyLandslide/tutorial.html>`_.
+

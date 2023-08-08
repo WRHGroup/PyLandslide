@@ -10,20 +10,28 @@ import rasterio
 
 class DataPreparation(object):
     """
-    test test test
+    This is a data preparation class that includes methods for co-registering raster layers and extracting
+    point data for Machine Learning.
     """
+
     def __init__(self, json_file=None, folder_name=None, *args, **kwargs):
+        """
+        Initialise a new DataPreparation object.
+
+        Args:
+            json_file: JSON-based document specifying the configuration information for performing data preparation.
+
+            folder_name: Folder containing the raster data.
+        """
         super().__init__(*args, **kwargs)
         self.json_file = json_file
         self.folder_name = folder_name
 
-    def load_data_from_json(self, **kwargs):
+    def load_data_from_json(self):
         """
-        Load configuration
-        Args:
-            **kwargs:
-
-        Returns: Attibutes
+        Loads the configuration JSON-based document assigned to self.json_file. Extracts the data from the JSON-based
+        document and assign them to self.factors, self.output_directory, self.landslide_locations, and
+        self.nonlandslide_locations.
 
         """
         data = os.path.normpath(os.path.join(os.getcwd(), self.json_file))
@@ -54,14 +62,16 @@ class DataPreparation(object):
 
     def setup(self):
         """
-        
-        Returns:
-
+        Calls the load_data_from_json method to extract the information provided in the JSON-based document.
         """
         self.load_data_from_json()
         print('Setting up WeightRangePreparation based on the file: "{}"'.format(self.json_file))
 
     def factor_data_preperation(self, factors):
+        """
+        Takes a list of dictionaries that include factor names and their associated raster files and returns
+        lists of factor names, datasets, and datasets as arrays.
+        """
         names = []
         sets = []
         sets_arrays = []
@@ -72,13 +82,12 @@ class DataPreparation(object):
             sets_arrays.append(set_temp.read(1))
         return names, sets, sets_arrays
 
-    def create_results_dict(self, index_array):
-        results_dic = {}
-        for n in index_array:
-            results_dic[n]=[]
-        return results_dic
-
     def extract(self):
+        """
+        Extracts the factor values at the landslide and non-landslide locations. These locations are obtained from the
+        shapefiles provided in the JSON-based document. The results are saved into features.csv (factor values) and
+        targets.csv (landslide or non-landslide status) in the output directory specified in the JSON-based document.
+        """
         print("Preparing and extracting data...")
         factor_data = self.factor_data_preperation(self.factors)
         self.factor_names = factor_data[0]
@@ -140,7 +149,21 @@ class DataPreparation(object):
 
         print("Completed.")
 
+    def create_results_dict(self, index_array):
+        """
+        Creates a dictionary for saving the results of the extract() method. This method takes the names indices (in
+        this case factor names) as an argument.
+        """
+        results_dic = {}
+        for n in index_array:
+            results_dic[n]=[]
+        return results_dic
+
     def adjust(self):
+        """
+        Looks into the self.folder_name variable and pre-process the raster files located in it by converting them to uint8
+        to reduce data size. The adjusted files are saved into "folder_name/uint8".
+        """
         dir_list = os.listdir(os.path.join(os.getcwd(), self.folder_name))
         raster_files = []
         outfiles = []
@@ -164,6 +187,11 @@ class DataPreparation(object):
                     dst.write(masked_ds, 1)
 
     def align(self):
+        """
+        Co-registers the rasters adjusted with the adjust() method by looking into "folder_name/uint8". The
+        co-registration is performed to ensure that all rasters are aligned, have the same resolution, and same array
+        sizes. The resulting co-registered rasters are saved into "folder_name/alinged_rasters".
+        """
         dir_list = os.listdir(os.path.join(os.getcwd(), self.folder_name))
         raster_files = []
         outfiles = []

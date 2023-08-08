@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>PyLandslide.data_preparation.DataPreparation &mdash; Pylandslide documentation 0.0.5 documentation</title>
+  <title>PyLandslide.data_preparation.DataPreparation &mdash; PyLandslide Documentation 0.0.5 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -18,9 +18,7 @@
         <script src="../_static/sphinx_highlight.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
-    <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="PyLandslide.sensitivity.SensitivityEstimator" href="PyLandslide.sensitivity.SensitivityEstimator.html" />
-    <link rel="prev" title="Data Preparation" href="../PyLandslide.html" /> 
+    <link rel="search" title="Search" href="../search.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -32,7 +30,7 @@
           
           
           <a href="../index.html" class="icon icon-home">
-            Pylandslide documentation
+            PyLandslide Documentation
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
@@ -43,21 +41,14 @@
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
-<ul class="current">
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="../introduction.html">Introduction</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../installation.html">Introduction</a></li>
-<li class="toctree-l1 current"><a class="reference internal" href="../modules.html">PyLandslide</a><ul class="current">
-<li class="toctree-l2 current"><a class="reference internal" href="../PyLandslide.html">Data Preparation</a><ul class="current">
-<li class="toctree-l3 current"><a class="current reference internal" href="#">PyLandslide.data_preparation.DataPreparation</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#PyLandslide.data_preparation.DataPreparation"><code class="docutils literal notranslate"><span class="pre">DataPreparation</span></code></a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="../PyLandslide.html#sensitivity-analysis">Sensitivity Analysis</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../PyLandslide.html#weight-uncertainty-analayis">Weight Uncertainty Analayis</a></li>
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../command_line.html">Command Line Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules.html">PyLandslide Python API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../license.html">License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../citation.html">Citation</a></li>
 </ul>
 
         </div>
@@ -66,7 +57,7 @@
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../index.html">Pylandslide documentation</a>
+          <a href="../index.html">PyLandslide Documentation</a>
       </nav>
 
       <div class="wy-nav-content">
@@ -74,8 +65,6 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
-          <li class="breadcrumb-item"><a href="../modules.html">PyLandslide</a></li>
-          <li class="breadcrumb-item"><a href="../PyLandslide.html">Data Preparation</a></li>
       <li class="breadcrumb-item active">PyLandslide.data_preparation.DataPreparation</li>
       <li class="wy-breadcrumbs-aside">
             <a href="../_sources/generated/PyLandslide.data_preparation.DataPreparation.rst.txt" rel="nofollow"> View page source</a>
@@ -91,38 +80,45 @@
 <dl class="py class">
 <dt class="sig sig-object py" id="PyLandslide.data_preparation.DataPreparation">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">PyLandslide.data_preparation.</span></span><span class="sig-name descname"><span class="pre">DataPreparation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">json_file</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">folder_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PyLandslide/data_preparation.html#DataPreparation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyLandslide.data_preparation.DataPreparation" title="Permalink to this definition"></a></dt>
-<dd><p>test test test</p>
+<dd><p>This is a data preparation class that includes methods for co-registering raster layers and extracting
+point data for Machine Learning.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="PyLandslide.data_preparation.DataPreparation.__init__">
 <span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">json_file</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">folder_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PyLandslide/data_preparation.html#DataPreparation.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyLandslide.data_preparation.DataPreparation.__init__" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Initialise a new DataPreparation object.</p>
+<dl>
+<dt>Args:</dt><dd><p>json_file: JSON-based document specifying the configuration information for performing data preparation.</p>
+<p>folder_name: Folder containing the raster data.</p>
+</dd>
+</dl>
+</dd></dl>
 
 <p class="rubric">Methods</p>
 <table class="autosummary longtable docutils align-default">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="#PyLandslide.data_preparation.DataPreparation.__init__" title="PyLandslide.data_preparation.DataPreparation.__init__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__init__</span></code></a>([json_file, folder_name])</p></td>
-<td><p></p></td>
+<td><p>Initialise a new DataPreparation object.</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">adjust</span></code>()</p></td>
-<td><p></p></td>
+<td><p>Looks into the self.folder_name variable and pre-process the raster files located in it by converting them to uint8 to reduce data size.</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">align</span></code>()</p></td>
-<td><p></p></td>
+<td><p>Co-registers the rasters adjusted with the adjust() method by looking into &quot;folder_name/uint8&quot;.</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">create_results_dict</span></code>(index_array)</p></td>
-<td><p></p></td>
+<td><p>Creates a dictionary for saving the results of the extract() method.</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">extract</span></code>()</p></td>
-<td><p></p></td>
+<td><p>Extracts the factor values at the landslide and non-landslide locations.</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">factor_data_preperation</span></code>(factors)</p></td>
-<td><p></p></td>
+<td><p>Takes a list of dictionaries that include factor names and their associated raster files and returns lists of factor names, datasets, and datasets as arrays.</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">load_data_from_json</span></code>(**kwargs)</p></td>
-<td><p>Load configuration Args:     <a href="#id1"><span class="problematic" id="id2">**</span></a>kwargs:</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">load_data_from_json</span></code>()</p></td>
+<td><p>Loads the configuration JSON-based document assigned to self.json_file.</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">setup</span></code>()</p></td>
-<td><p>Returns:</p></td>
+<td><p>Calls the load_data_from_json method to extract the information provided in the JSON-based document.</p></td>
 </tr>
 </tbody>
 </table>
@@ -133,10 +129,7 @@
 
            </div>
           </div>
-          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="../PyLandslide.html" class="btn btn-neutral float-left" title="Data Preparation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="PyLandslide.sensitivity.SensitivityEstimator.html" class="btn btn-neutral float-right" title="PyLandslide.sensitivity.SensitivityEstimator" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
-    </div>
+          <footer>
 
   <hr/>
 

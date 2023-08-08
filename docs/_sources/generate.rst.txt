@@ -1,0 +1,34 @@
+The "generate" command
+-----------------------
+This command is used to generate a susceptibility raster layer using based on an input sensitivity CSV file generated using the
+``sensitivity`` command and the index of the desired trial for raster generation. The resulting raster file is saved into the output
+directory and uses the index as a name suffix.
+
+For help on the inputs of this command, run the following:
+
+.. code-block:: console
+
+    PyLandslide generate --help
+
+This results in the following, including three inputs:
+
+.. code-block:: console
+
+    Usage: PyLandslide generate [OPTIONS]
+
+        Generate a landslide hazard layer based on a sensitivity trial.
+
+    Options:
+        -f, --file-name TEXT        JSON file containing the sensitivity config.
+        -c, --csv-sensitivity TEXT  CSV file of the sensitivity results.
+        -i, --index INTEGER         Index of the desired trail.
+        --help                      Show this message and exit.
+
+To use the ``generate`` command, run the following and make sure to replace the inputs based on your case:
+
+.. code-block:: console
+
+    PyLandslide generate -f  json_file.json -c sensitivity_results.csv -i 0
+
+Further details on the structure and inputs to the JSON file are in the `Tutorials Section <https://ierrg.github.io/PyLandslide/tutorial.html>`_.
+

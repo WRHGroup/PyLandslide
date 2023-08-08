@@ -1,0 +1,29 @@
+﻿PyLandslide.weightrange
+=======================
+
+.. automodule:: PyLandslide.weightrange
+
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      WeightRangeEstimator
+   
+   
+
+   
+   
+   
+
+
+
