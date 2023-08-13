@@ -19,7 +19,7 @@ Landslide susceptibility and uncertainty analysis can be performed in PyLandslid
 Installation
 ============
 
-PyLandslide should work on Python 3.6 (or later) on Windows, Linux or OS X.
+PyLandslide works on Python 3.6 (or later) on Windows, Linux, or OS X.
 
 See the documentation for details on `how to install PyLandslide <https://ierrg.github.io/PyLandslide/installation.html>`__.
 
