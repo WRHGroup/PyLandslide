@@ -29,5 +29,5 @@ To use the ``sensitivity`` command, run the following and make sure to replace t
 
     PyLandslide sensitivity -f json_file.json -t 5
 
-Further details on the structure and inputs to the JSON file are in the `Tutorials Section <https://ierrg.github.io/PyLandslide/tutorial.html>`_.
+Further details on the structure and inputs to the JSON file are in the `Tutorials Section <https://ierrg.github.io/PyLandslide/tutorial.html#sensitivity-analysis>`_.
 
