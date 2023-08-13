@@ -7,7 +7,7 @@ After installing PyLandslide, to know which commands are available through the C
 
     PyLandslide --help
 
-This results in the following, which shows six available commands available through the Command Line Interface (CLI):
+This results in the following, which shows six commands available through the Command Line Interface (CLI):
 
 .. code-block:: console
 

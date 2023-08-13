@@ -29,5 +29,5 @@ To use the ``compare`` command, run the following and make sure to replace the i
 
     PyLandslide compare -f json_file.json -l1 layer1.tif -l2 layer2.tif
 
-Further details on the structure and inputs to the JSON file are in the `Tutorials Section <https://ierrg.github.io/PyLandslide/tutorial.html>`_.
+Further details on the structure and inputs to the JSON file are in the `Tutorials Section <https://ierrg.github.io/PyLandslide/tutorial.html#comparing-two-susceptibility-raster-layer>`_.
 
