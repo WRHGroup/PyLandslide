@@ -21,10 +21,10 @@ landslide or non-landslide)
 1.1. Factor data co-registration
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-As shown below, to perform the factor data co-registration operation, use the `coregister command  <https://ierrg.github.io/PyLandslide/coregister.html>`__
+As shown below, to perform the factor data co-registration operation, use the `coregister command  <https://shesp-lab.github.io/PyLandslide/coregister.html>`__
 through the Command Line Interface (CLI), where ``raster_data`` is a folder in which the raw input factor raster data are
 stored. Sample reclassified factor data are available for Italy in the
-`Github Repository of PyLandslide <https://github.com/IERRG/PyLandslide/tree/main/tests/files/raster_data>`__. It is
+`Github Repository of PyLandslide <https://github.com/shesp-lab/PyLandslide/tree/main/tests/files/raster_data>`__. It is
 important to note that factor data needs to be reclassified with an integer score ranging from 0 to 100 for each class;
 PyLandslide **DOES NOT** currently perform reclassification and score estimation.
 
@@ -39,7 +39,7 @@ A version of the raw factor data is converted to uint8 type to reduce size and i
 1.2. Machine Learning data extraction
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-As shown below, to perform the Machine Learning data extraction operation, use the `mldata command  <https://ierrg.github.io/PyLandslide/mldata.html>`__
+As shown below, to perform the Machine Learning data extraction operation, use the `mldata command  <https://shesp-lab.github.io/PyLandslide/mldata.html>`__
 through the Command Line Interface (CLI), where ``1_weight_range_data_preparation.json`` is a JSON (JavaScript Object Notation) text file containing
 the information needed to running the mldata command.
 
@@ -47,7 +47,7 @@ the information needed to running the mldata command.
 
     PyLandslide mldata -f 1_weight_range_data_preparation.json
 
-An example JSON file for the mldata command is available in the `Github Repository of PyLandslide <https://github.com/IERRG/PyLandslide/blob/main/tests/files/1_weight_range_data_preparation.json>`__.
+An example JSON file for the mldata command is available in the `Github Repository of PyLandslide <https://github.com/shesp-lab/PyLandslide/blob/main/tests/files/1_weight_range_data_preparation.json>`__.
 The JSON file is used to point to the output directory for the operation, the landslide and non-landslide shapefiles,
 and locations and names of the factor raster files. Below is an example JSON file. Please follow the exact structure
 and only change input information where needed.
@@ -89,13 +89,13 @@ and contains the corresponding status in terms of landslide or non-landslide loc
 2. Weight Range Analysis
 -------------------------
 
-PyLandslide uses the feature and target CSV files generated using the `mldata command  <https://ierrg.github.io/PyLandslide/mldata.html>`__
+PyLandslide uses the feature and target CSV files generated using the `mldata command  <https://shesp-lab.github.io/PyLandslide/mldata.html>`__
 to train many Random Forest Regression Machine Learning models on predicting whether a location is a landslide or
 non-landslide. Models that show a performance above a threshold (define based on overall accuracy in testing and training) are
 used to calculate feature importance, which represents the contribution of each factor in determining the status of a
 location. By random sampling from the feature and target data, the range of factor weights can be derived.
 
-As shown below, to perform Weight Range Analysis, use the `weightrange command  <https://ierrg.github.io/PyLandslide/weightrange.html>`__
+As shown below, to perform Weight Range Analysis, use the `weightrange command  <https://shesp-lab.github.io/PyLandslide/weightrange.html>`__
 through the Command Line Interface (CLI), where ``2_weight_range_json_file.json.json`` is a JSON (JavaScript Object Notation) text file containing
 the information needed to running the weightrange command.
 
@@ -103,7 +103,7 @@ the information needed to running the weightrange command.
 
     PyLandslide weightrange -f 2_weight_range_json_file.json
 
-An example JSON file for the weightrange command is available in the `Github Repository of PyLandslide <https://github.com/IERRG/PyLandslide/blob/main/tests/files/2_weight_range_json_file.json>`__.
+An example JSON file for the weightrange command is available in the `Github Repository of PyLandslide <https://github.com/shesp-lab/PyLandslide/blob/main/tests/files/2_weight_range_json_file.json>`__.
 The JSON file is used to point to the features CSV file, the targets CSV file, and the output file in which weight ranges
 are saved. Furthermore, for the random forest model, the JSON file defines the number of trees, the maximum tree depth,
 the sized of the testing sample, and lower performance cutoff for using the trained model, the number of processing cores to be used
@@ -115,7 +115,6 @@ exact structure and only change input information where needed.
     {
         "features_file":"csv_data/features.csv",
         "targets_file":"csv_data/targets.csv",
-        "tree_depths_file":"csv_data/tree_depths_by_target.csv",
         "number_trees":15,
         "max_tree_depth":9,
         "size_testing_sample":0.2,
@@ -132,12 +131,12 @@ cutoff requirement. The output CSV file also includes the overall accuracy value
 3. Sensitivity Analysis
 ------------------------
 
-PyLandslide uses the weight range CSV file generated using the `weightrange command  <https://ierrg.github.io/PyLandslide/weightrange.html>`__
+PyLandslide uses the weight range CSV file generated using the `weightrange command  <https://shesp-lab.github.io/PyLandslide/weightrange.html>`__
 to perform a sensitivity analysis by randomly sampling from the set of weights available in the CSV file, performing landslide
 susceptibility mapping based on each set of weights, and calculating the percentage area under each susceptibility class.
 The susceptibility classes and the number of sensitivity iterations (or trials) are also provided as an inputs.
 
-As shown below, to perform Sensitivity Analysis, use the `sensitivity command  <https://ierrg.github.io/PyLandslide/sensitivity.html>`__
+As shown below, to perform Sensitivity Analysis, use the `sensitivity command  <https://shesp-lab.github.io/PyLandslide/sensitivity.html>`__
 through the Command Line Interface (CLI), where ``3_sensitivity_json_file_historical_rainfall.json`` is a JSON (JavaScript Object Notation) text file containing
 the information needed to running the sensitivity command, and the number following ``-t`` is an integer specifying the
 number of sensitivity iterations (or trials).
@@ -146,9 +145,9 @@ number of sensitivity iterations (or trials).
 
     PyLandslide sensitivity -f 3_sensitivity_json_file_historical_rainfall.json -t 5
 
-An example JSON file for the sensitivity command is available in the `Github Repository of PyLandslide <https://github.com/IERRG/PyLandslide/blob/main/tests/files/3_sensitivity_json_file_historical_rainfall.json>`__.
+An example JSON file for the sensitivity command is available in the `Github Repository of PyLandslide <https://github.com/shesp-lab/PyLandslide/blob/main/tests/files/3_sensitivity_json_file_historical_rainfall.json>`__.
 The JSON file is used to point to the output directory for the operation, the weight range CSV file generated using the
-`weightrange command  <https://ierrg.github.io/PyLandslide/weightrange.html>`__, the factors and their locations, the
+`weightrange command  <https://shesp-lab.github.io/PyLandslide/weightrange.html>`__, the factors and their locations, the
 upper and lower bounds of the landslide susceptibility classes. Please follow the exact structure and only change input
 information where needed.
 
@@ -216,10 +215,10 @@ area under each landslide susceptibility class.
 ------------------------------------------
 
 After performing a sensitivity analysis, one might want to generate a susceptibility raster layer for a specific sensitivity
-trial. PyLandslide enables doing this through the `generate command  <https://ierrg.github.io/PyLandslide/generate.html>`__.
+trial. PyLandslide enables doing this through the `generate command  <https://shesp-lab.github.io/PyLandslide/generate.html>`__.
 
 As shown below, the ``generate`` command is used through the Command Line Interface (CLI), where ``3_sensitivity_json_file_historical_rainfall.json``
-is the `same JSON (JavaScript Object Notation) text file <https://github.com/IERRG/PyLandslide/blob/main/tests/files/3_sensitivity_json_file_historical_rainfall.json>`__
+is the `same JSON (JavaScript Object Notation) text file <https://github.com/shesp-lab/PyLandslide/blob/main/tests/files/3_sensitivity_json_file_historical_rainfall.json>`__
 used to run the sensitivity command,  ``sensitivity_results.csv`` is the output CSV file of the sensitivity analysis, and
 the number following ``-i`` is an integer specifying the index of the sensitivity trial for which a raster layer is to be
 generated.  The ``sensitivity_results.csv`` must be under a folder named ``outputs`` for PyLandslide to be able to find it.
@@ -235,10 +234,10 @@ as a name suffix.
 ---------------------------------------------
 
 One might need to compare two landslide susceptibility raster layers. This can be performed through the
-`compare command  <https://ierrg.github.io/PyLandslide/compare.html>`__ of PyLandslide.
+`compare command  <https://shesp-lab.github.io/PyLandslide/compare.html>`__ of PyLandslide.
 
 As shown below, the ``compare`` command is used through the Command Line Interface (CLI), where ``3_sensitivity_json_file_historical_rainfall.json``
-is the `same JSON (JavaScript Object Notation) text file <https://github.com/IERRG/PyLandslide/blob/main/tests/files/3_sensitivity_json_file_historical_rainfall.json>`__
+is the `same JSON (JavaScript Object Notation) text file <https://github.com/shesp-lab/PyLandslide/blob/main/tests/files/3_sensitivity_json_file_historical_rainfall.json>`__
 used to run the sensitivity command,  ``layer1.tif`` is the first raster layer and ``layer2.tif`` is the second raster layer
 to be compared. Both ``layer1.tif`` and ``layer2.tif`` must be under a folder named ``outputs`` for PyLandslide to be able
 to find them.
