@@ -28,5 +28,5 @@ To use the ``compare`` command, run the following and make sure to replace the i
 
     PyLandslide weightrange -f json_file.json
 
-Further details on the structure and inputs to the JSON file are in the `Tutorials Section <https://ierrg.github.io/PyLandslide/tutorial.html#weight-range-analysis>`_.
+Further details on the structure and inputs to the JSON file are in the `Tutorials Section <https://shesp-lab.github.io/PyLandslide/tutorial.html#weight-range-analysis>`_.
 

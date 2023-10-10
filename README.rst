@@ -7,13 +7,13 @@ PyLandslide is a machine learning-assisted open-source Python tool for landslide
 Introduction
 ============
 
-For details on how to install and use the tool, please refer to the `Documentation <https://ierrg.github.io/PyLandslide/>`__.
+For details on how to install and use the tool, please refer to the `Documentation <https://shesp-lab.github.io/PyLandslide/>`__.
 
 PyLandslide is a tool for spatial mapping of landslide susceptibility. The tool uses "qualitative map combination," in which the effects of multiple factors that contribute to landslide occurrence are combined using weights. The tool uses Machine learning to determine weights and their uncertainties. The tool is also designed to conduct sensitivity analysis based on weight ranges and spatially compare the outcomes of different weight choices.
 
-Landslide susceptibility and uncertainty analysis can be performed in PyLandslide either through high-level commands or using Python code. Either way, some inputs to different methods and functionalities need to be provided through JSON-based document format. The `Documentation <https://ierrg.github.io/PyLandslide/>`__ page provides further details on how to use the tool and provide the required inputs.
+Landslide susceptibility and uncertainty analysis can be performed in PyLandslide either through high-level commands or using Python code. Either way, some inputs to different methods and functionalities need to be provided through JSON-based document format. The `Documentation <https://shesp-lab.github.io/PyLandslide/>`__ page provides further details on how to use the tool and provide the required inputs.
 
-.. image:: https://raw.githubusercontent.com/IERRG/PyLandslide/main/docs/figs/frm.jpg
+.. image:: https://raw.githubusercontent.com/SHESP-Lab/PyLandslide/main/docs/figs/frm.jpg
    :width: 750px
 
 Installation
@@ -21,7 +21,7 @@ Installation
 
 PyLandslide works on Python 3.6 (or later) on Windows, Linux, or OS X.
 
-See the documentation for details on `how to install PyLandslide <https://ierrg.github.io/PyLandslide/installation.html>`__.
+See the documentation for details on `how to install PyLandslide <https://shesp-lab.github.io/PyLandslide/installation.html>`__.
 
 PyLandslide can be installed by running:
 
@@ -29,11 +29,11 @@ PyLandslide can be installed by running:
 
     pip install PyLandslide
 
-For advanced users, developers, and those who wish to contribute to the development of PyLandslide, make sure to have installed the required `dependencies <https://ierrg.github.io/PyLandslide/installation.html>`__. Then clone the repository:
+For advanced users, developers, and those who wish to contribute to the development of PyLandslide, make sure to have installed the required `dependencies <https://shesp-lab.github.io/PyLandslide/installation.html>`__. Then clone the repository:
 
 .. code-block:: console
 
-    git clone https://github.com/IERRG/PyLandslide.git
+    git clone https://github.com/SHESP-Lab/PyLandslide.git
 
 Once the repository is cloned, navigate to its directory and run:
 

@@ -7,7 +7,7 @@ PyLandslide - landslide susceptibility mapping and uncertainty analysis in Pytho
 ===================================================================================
 
 PyLandslide is a machine learning-assisted open-source Python tool for landslide susceptibility mapping and uncertainty analysis.
-The source code of PyLandslide is hosted on the following `GitHub Repository <https://github.com/IERRG/PyLandslide.git>`_.
+The source code of PyLandslide is hosted on the following `GitHub Repository <https://github.com/SHESP-Lab/PyLandslide>`_.
 
 .. toctree::
    :maxdepth: 2
