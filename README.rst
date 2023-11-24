@@ -53,7 +53,7 @@ Citation
 Please cite the following papers when using PyLandslide:
 
 
-    1. Basheer, Oommen, Takamatsu & Suzuki. Machine learning and sensitivity analysis approach to quantify uncertainty in landslide susceptibility mapping. https://documents.worldbank.org/en/publication/documents-reports/documentdetail/099356212142224352/idu1aab5df2016d2814a3c1bf5b11897f7cbd136 (2022).
+    1. To be added.
 
 
 License
