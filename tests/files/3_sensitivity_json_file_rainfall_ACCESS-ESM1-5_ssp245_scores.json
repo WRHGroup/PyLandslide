@@ -21,6 +21,10 @@
     {
       "name":"slope",
       "file":"raster_data/slope_scores.tif"
+    },
+    {
+      "name":"TWI",
+      "file":"raster_data/TWI_scores.tif"
     }
   ],
   "susceptibility_classes":[
