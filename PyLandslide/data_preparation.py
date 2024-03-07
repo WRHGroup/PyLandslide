@@ -226,7 +226,7 @@ class DataPreparation(object):
         for ix, rd in enumerate(raster_files):
             dst_transform_temp, dst_width_temp, dst_height_temp = calculate_default_transform(
                 src_crs=coordinate_system[ix],
-                dst_crs=coordinate_system[1], 
+                dst_crs=coordinate_system[0], 
                 width=min(raster_width),
                 height=min(raster_height),
                 left=max(bound_left),
@@ -242,7 +242,7 @@ class DataPreparation(object):
             with rasterio.open(rff) as rf: 
                 ddd = rf.read(1)
                 dst_kwargs = rf.meta.copy()
-                dst_kwargs.update({"crs": coordinate_system[1],
+                dst_kwargs.update({"crs": coordinate_system[0],
                                 "transform": dst_transform[ix],
                                 "width": dst_width[ix],
                                 "height": dst_height[ix],
@@ -258,7 +258,7 @@ class DataPreparation(object):
                             destination=rasterio.band(dst, i),
                             src_transform=rf.transform,
                             src_crs=rf.crs,
-                            dst_transform=dst_transform[1],
-                            dst_crs=coordinate_system[1],
+                            dst_transform=dst_transform[0],
+                            dst_crs=coordinate_system[0],
                             num_threads=4,
                             resampling=Resampling.nearest)
