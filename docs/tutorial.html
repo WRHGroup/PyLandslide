@@ -1,21 +1,23 @@
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="./">
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Tutorials &mdash; PyLandslide Documentation 0.0.5 documentation</title>
-      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+
+  
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script src="_static/jquery.js"></script>
-        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/doctools.js"></script>
-        <script src="_static/sphinx_highlight.js"></script>
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=282f96c0"></script>
+        <script src="_static/doctools.js?v=9a2dae69"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -89,9 +91,9 @@
            <div itemprop="articleBody">
              
   <section id="tutorials">
-<h1>Tutorials<a class="headerlink" href="#tutorials" title="Permalink to this heading"></a></h1>
+<h1>Tutorials<a class="headerlink" href="#tutorials" title="Link to this heading"></a></h1>
 <section id="data-preparation">
-<h2>1. Data Preparation<a class="headerlink" href="#data-preparation" title="Permalink to this heading"></a></h2>
+<h2>1. Data Preparation<a class="headerlink" href="#data-preparation" title="Link to this heading"></a></h2>
 <p>Two operations can be performed in PyLandslide for data preparation: (1) factor data co-registration (i.e., re-projection
 and alignment) and(1) Machine Learning data extraction.</p>
 <p>Reclassified factor data are provided to PyLandslide in a raster format (i.e., tif) and should have the same spatial resolution. The
@@ -104,7 +106,7 @@ at which no landslides occurred in the past. The output of the Machine learning 
 including the features (i.e., the values of factors) and the other the targets (i.e., the corresponding status as
 landslide or non-landslide)</p>
 <section id="factor-data-co-registration">
-<h3>1.1. Factor data co-registration<a class="headerlink" href="#factor-data-co-registration" title="Permalink to this heading"></a></h3>
+<h3>1.1. Factor data co-registration<a class="headerlink" href="#factor-data-co-registration" title="Link to this heading"></a></h3>
 <p>As shown below, to perform the factor data co-registration operation, use the <a class="reference external" href="https://shesp-lab.github.io/PyLandslide/coregister.html">coregister command</a>
 through the Command Line Interface (CLI), where <code class="docutils literal notranslate"><span class="pre">raster_data</span></code> is a folder in which the raw input factor raster data are
 stored. Sample reclassified factor data are available for Italy in the
@@ -119,7 +121,7 @@ A version of the raw factor data is converted to uint8 type to reduce size and i
 <code class="docutils literal notranslate"><span class="pre">alinged_rasters</span></code> folder includes the final co-registered raster layers to be used in the next steps.</p>
 </section>
 <section id="machine-learning-data-extraction">
-<h3>1.2. Machine Learning data extraction<a class="headerlink" href="#machine-learning-data-extraction" title="Permalink to this heading"></a></h3>
+<h3>1.2. Machine Learning data extraction<a class="headerlink" href="#machine-learning-data-extraction" title="Link to this heading"></a></h3>
 <p>As shown below, to perform the Machine Learning data extraction operation, use the <a class="reference external" href="https://shesp-lab.github.io/PyLandslide/mldata.html">mldata command</a>
 through the Command Line Interface (CLI), where <code class="docutils literal notranslate"><span class="pre">1_weight_range_data_preparation.json</span></code> is a JSON (JavaScript Object Notation) text file containing
 the information needed to running the mldata command.</p>
@@ -165,7 +167,7 @@ and contains the corresponding status in terms of landslide or non-landslide loc
 </section>
 </section>
 <section id="weight-range-analysis">
-<h2>2. Weight Range Analysis<a class="headerlink" href="#weight-range-analysis" title="Permalink to this heading"></a></h2>
+<h2>2. Weight Range Analysis<a class="headerlink" href="#weight-range-analysis" title="Link to this heading"></a></h2>
 <p>PyLandslide uses the feature and target CSV files generated using the <a class="reference external" href="https://shesp-lab.github.io/PyLandslide/mldata.html">mldata command</a>
 to train many Random Forest Regression Machine Learning models on predicting whether a location is a landslide or
 non-landslide. Models that show a performance above a threshold (define based on overall accuracy in testing and training) are
@@ -201,7 +203,7 @@ includes the different sets of weights resulting from the Machine Leaning models
 cutoff requirement. The output CSV file also includes the overall accuracy values of each satisfactory model iteration.</p>
 </section>
 <section id="sensitivity-analysis">
-<h2>3. Sensitivity Analysis<a class="headerlink" href="#sensitivity-analysis" title="Permalink to this heading"></a></h2>
+<h2>3. Sensitivity Analysis<a class="headerlink" href="#sensitivity-analysis" title="Link to this heading"></a></h2>
 <p>PyLandslide uses the weight range CSV file generated using the <a class="reference external" href="https://shesp-lab.github.io/PyLandslide/weightrange.html">weightrange command</a>
 to perform a sensitivity analysis by randomly sampling from the set of weights available in the CSV file, performing landslide
 susceptibility mapping based on each set of weights, and calculating the percentage area under each susceptibility class.
@@ -278,7 +280,7 @@ has been specified in the JSON file. The CSV file includes, for each sensitivity
 area under each landslide susceptibility class.</p>
 </section>
 <section id="generating-susceptibility-raster-layer">
-<h2>4. Generating susceptibility raster layer<a class="headerlink" href="#generating-susceptibility-raster-layer" title="Permalink to this heading"></a></h2>
+<h2>4. Generating susceptibility raster layer<a class="headerlink" href="#generating-susceptibility-raster-layer" title="Link to this heading"></a></h2>
 <p>After performing a sensitivity analysis, one might want to generate a susceptibility raster layer for a specific sensitivity
 trial. PyLandslide enables doing this through the <a class="reference external" href="https://shesp-lab.github.io/PyLandslide/generate.html">generate command</a>.</p>
 <p>As shown below, the <code class="docutils literal notranslate"><span class="pre">generate</span></code> command is used through the Command Line Interface (CLI), where <code class="docutils literal notranslate"><span class="pre">3_sensitivity_json_file_historical_rainfall.json</span></code>
@@ -293,7 +295,7 @@ generated.  The <code class="docutils literal notranslate"><span class="pre">sen
 as a name suffix.</p>
 </section>
 <section id="comparing-two-susceptibility-raster-layer">
-<h2>5. Comparing two susceptibility raster layer<a class="headerlink" href="#comparing-two-susceptibility-raster-layer" title="Permalink to this heading"></a></h2>
+<h2>5. Comparing two susceptibility raster layer<a class="headerlink" href="#comparing-two-susceptibility-raster-layer" title="Link to this heading"></a></h2>
 <p>One might need to compare two landslide susceptibility raster layers. This can be performed through the
 <a class="reference external" href="https://shesp-lab.github.io/PyLandslide/compare.html">compare command</a> of PyLandslide.</p>
 <p>As shown below, the <code class="docutils literal notranslate"><span class="pre">compare</span></code> command is used through the Command Line Interface (CLI), where <code class="docutils literal notranslate"><span class="pre">3_sensitivity_json_file_historical_rainfall.json</span></code>
