@@ -5,7 +5,7 @@ with open('README.rst') as f:
 
 setup(
     name='PyLandslide',
-    version='0.1.4',
+    version='0.1.5',
     long_description=long_description,
     long_description_content_type="text/x-rst",
     description='Tool for landslide susceptibility mapping and uncertainty analysis.',
