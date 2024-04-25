@@ -3,7 +3,7 @@ PyLandslide Python API
 
 Unified Modelling Language Class Diagram
 -----------------------------------------
-.. image:: https://raw.githubusercontent.com/shesp-lab/PyLandslide/main/docs/figs/UML.jpg
+.. image:: https://raw.githubusercontent.com/WRHGroup/PyLandslide/main/docs/figs/UML.jpg
    :width: 750px
 
 Classes and methods description
