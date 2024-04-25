@@ -28,5 +28,5 @@ To use the ``mldata`` command, run the following and make sure to replace the in
 
     PyLandslide mldata -f  json_file.json
 
-Further details on the structure and inputs to the JSON file are in the `Tutorials Section <https://shesp-lab.github.io/PyLandslide/tutorial.html#machine-learning-data-extraction>`_.
+Further details on the structure and inputs to the JSON file are in the `Tutorials Section <https://WRHGroup.github.io/PyLandslide/tutorial.html#machine-learning-data-extraction>`_.
 

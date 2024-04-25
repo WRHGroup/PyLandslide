@@ -30,5 +30,5 @@ To use the ``generate`` command, run the following and make sure to replace the 
 
     PyLandslide generate -f  json_file.json -c sensitivity_results.csv -i 0
 
-Further details on the structure and inputs to the JSON file are in the `Tutorials Section <https://shesp-lab.github.io/PyLandslide/tutorial.html#generating-susceptibility-raster-layer>`_.
+Further details on the structure and inputs to the JSON file are in the `Tutorials Section <https://WRHGroup.github.io/PyLandslide/tutorial.html#generating-susceptibility-raster-layer>`_.
 
