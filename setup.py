@@ -5,11 +5,11 @@ with open('README.rst') as f:
 
 setup(
     name='PyLandslide',
-    version='0.1.3',
+    version='0.1.4',
     long_description=long_description,
     long_description_content_type="text/x-rst",
-    description='Tools for landslide hazard uncertainty analysis.',
-    url='https://github.com/IERRG/PyLandslide',
+    description='Tool for landslide susceptibility mapping and uncertainty analysis.',
+    url='https://github.com/WRHGroup/PyLandslide',
     author='Mohammed Basheer',
     author_email='mohammedadamabbaker@gmail.com',
     license='GNU',
