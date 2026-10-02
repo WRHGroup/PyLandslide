@@ -3,9 +3,13 @@ import os
 import json
 import pandas as pd
 import logging
+import imblearn
+import joblib
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import confusion_matrix
+from imblearn.under_sampling import RandomUnderSampler
+
 logger = logging.getLogger(__name__)
 
 class WeightRangeEstimator(object):
@@ -47,7 +51,18 @@ class WeightRangeEstimator(object):
         if loaded_file.get('targets_file') is None:
             raise ValueError('targets_file has not been found in the JSON file')
         self.targets_file = os.path.normpath(os.path.join(self.json_file_directory, loaded_file.pop('targets_file')))
-            
+
+        # Adding the option to select which target column to model
+        if loaded_file.get('target_column') is None:
+            print(
+                'target column has been set to landslide/nonlandslide'
+                'if you want to model a specific landslide type add target_column to the inputs in the provided JSON file'
+            )    
+            self.target_column = 'status_id'
+        else:
+            self.target_column=loaded_file.pop("target_column")
+
+
         if loaded_file.get('max_tree_depth') is None:
             print('max tree depth has been set to 100. If you wish to change this default value, add max_tree_depth to the inputs provided in the JSON file')
             self.max_tree_depth = 100
@@ -66,6 +81,14 @@ class WeightRangeEstimator(object):
         else:
             self.output_file = os.path.normpath(os.path.join(self.json_file_directory, loaded_file.pop('output_file')))
 
+
+        # Adding the option to save the models
+        #If its not specified, saving models is disabled
+        self.save_models = loaded_file.pop("save_models",False)
+        
+        #saving the models to a folder within the output folder
+        self.models_output_folder = os.path.join(os.path.dirname(self.output_file),"rf_models")
+        
         if loaded_file.get('size_testing_sample') is None:
             print('size of testing sample has been set to 0.2. If you wish to change this default value, add size_testing_sample to the inputs provided in the JSON file')
             self.size_testing_sample = 0.2
@@ -74,7 +97,7 @@ class WeightRangeEstimator(object):
 
         if loaded_file.get('number_of_iterations') is None:
             print('number of iterations has been set to 500. If you wish to change this default value, add number_of_iterations to the inputs provided in the JSON file')
-            self.number_of_iterations = 50
+            self.number_of_iterations = 500
         else:
             self.number_of_iterations = loaded_file.pop('number_of_iterations')
 
@@ -110,9 +133,38 @@ class WeightRangeEstimator(object):
         targets_df = self.load_data_from_csv(self.targets_file, index_column = 'id')
         features_df = self.load_data_from_csv(self.features_file, index_column = 'id')
 
-        #Cach target and feature names
-        target_names = targets_df.columns
-        feature_names = features_df.columns
+        # Adding an error if selected target column is not found
+        if self.target_column not in targets_df.columns:
+            raise ValueError(
+                'target column "{}" was not found in targets.csv'
+                'Available target columns are :{}'.format(self.target_column,list(targets_df.columns))
+            )
+
+        # adding the target landslide type 
+        if self.target_column == "status_id":
+            #the original landslide/nonlandslide targets
+            model_targets = targets_df['status_id']
+            model_features = features_df
+
+        else:
+            # for a landslide type specific model, retaining selected landslide type as 1 and 0 for non landslide (make nonlandslide and landslide the same)
+            model_targets = targets_df[self.target_column]
+            model_features = features_df
+
+        # #Cach target and feature names
+        # target_names = targets_df.columns
+        # feature_names = features_df.columns
+
+        #Priting model information
+        print('-------------------------------------')
+        print('Modelling target:', self.target_column)
+        print('Number of modelling points:', len(model_targets))
+        print('Positive points:', int((model_targets ==1).sum()))
+        print('Negative points:', int((model_targets ==0).sum()))
+
+        #Cache feature names 
+        feature_names = model_features.columns
+
         all_columns = list(feature_names)
         all_columns.append("target")
         all_columns.append("training_overall_accuracy")
@@ -123,26 +175,54 @@ class WeightRangeEstimator(object):
         results.index.name = 'iteration'
 
         for itera in range(int(self.number_of_iterations)):
+            # NEW ADDITION: RANDOM UNDERSAMPLING
+            # Retain all positive points and randomly select an even number of negative points
+            sampler = RandomUnderSampler(
+                sampling_strategy = 1.0, # 1 to 1 ratio,
+                random_state = None,
+                replacement=  False,
+                )
+
+            X_resampled, Y_resampled = sampler.fit_resample (model_features,model_targets)
+
+            #Print the resampled counts
+
+            print("--------------------")
+            print("iteration: ",1+ itera)
+            # print("resampled head: ",(Y_resampled==1).sum())
+            print("resampled size: ", (Y_resampled.size))
+            print("resampled Positive points: ",int((Y_resampled==1).sum()))
+            print("resampled negative points: ",int((Y_resampled==0).sum()))
+
+
             #Note: This randomly split the data in 80% train and 20% test data
-            X_train, X_test, Y_train, Y_test = train_test_split(features_df, targets_df, test_size = self.size_testing_sample)
+            X_train, X_test, Y_train, Y_test = train_test_split(X_resampled, Y_resampled, test_size = self.size_testing_sample, stratify= Y_resampled) #for an equal num of selected landslide and non landslide in the testing & training data
 
             print('-------------------------------------')
             print('Iteration number:',1+itera)
 
             #create a RandomForestClassifier model
-            importances = self.feature_importance_model(targets=Y_train[target_names[0]], features=X_train, max_tree_depth=self.max_tree_depth, n_estimators=self.number_trees, cores=self.cores)
+            importances = self.feature_importance_model(targets=Y_train, features=X_train, max_tree_depth=self.max_tree_depth, n_estimators=self.number_trees, cores=self.cores)
 
-            metrics = self.overall_accuracy(importances[1],X_train,Y_train[target_names[0]],X_test,Y_test[target_names[0]])
+            # adding the model saving option
+            if self.save_models:
+                model_filename = (f"rf_model_iteration_{itera+1}.joblib")
+                model_path = os.path.join(self.models_output_folder,model_filename)
+                joblib.dump(importances[1],model_path)
+                print("Saved model: ",model_path)
+
+            metrics = self.overall_accuracy(importances[1],X_train,Y_train,X_test,Y_test)
 
             #save the values of relative importance into the 'results' dataframe
             if metrics[0] >= self.performance_cutoff and metrics[1] >= self.performance_cutoff:
-                results.at[itera, "target"] = target_names[0]
+                results.at[itera, "target"] = self.target_column
                 results.at[itera, "training_overall_accuracy"] = metrics[0]
                 results.at[itera, "testing_overall_accuracy"] = metrics[1]
                 for f, feat in enumerate (feature_names):
                     results.at[itera, feat] = importances[0][f]
 
         results.dropna(how='all').to_csv(self.output_file)
+
 
     def feature_importance_model(self, targets, features, max_tree_depth, n_estimators, cores):
         """

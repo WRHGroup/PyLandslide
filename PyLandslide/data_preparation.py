@@ -51,7 +51,7 @@ class DataPreparation(object):
             self.output_directory = os.path.normpath(self.json_file_directory)
         else:
             self.output_directory = os.path.normpath(os.path.join(self.json_file_directory, loaded_file.pop('output_directory')))
-
+        
         if loaded_file.get('landslide_locations') is None:
             raise ValueError('landslide_locations has not been found in the JSON file')
         self.landslide_locations = os.path.normpath(os.path.join(self.json_file_directory, loaded_file.pop('landslide_locations')))
@@ -59,6 +59,50 @@ class DataPreparation(object):
         if loaded_file.get('nonlandslide_locations') is None:
             raise ValueError('nonlandslide_locations has not been found in the JSON file')
         self.nonlandslide_locations = os.path.normpath(os.path.join(self.json_file_directory, loaded_file.pop('nonlandslide_locations')))
+
+        #adding a new line for enabling landslide type differentiation
+        self.landslide_types = loaded_file.pop("landslide_types",False)
+
+    def prepare_landslide_types(self, minimum_count = 50):
+        """
+        Converts the landslide 'type' column into binary target columns
+
+        Landslide types with fewer than the specified minimum number of points will be grouped into the
+        'other' category
+        """
+
+        if "Type" not in self.landslide_locations_shp.columns:
+            raise ValueError('"Type" column has not been found within the landslide shapefile')
+
+        gdf = self.landslide_locations_shp.copy()
+
+        #Cleaning the type labels
+        gdf ["type_clean"] = (gdf["Type"].astype("string").str.strip().str.lower())
+        gdf["type_clean"] = gdf['type_clean'].fillna("unknown")
+
+        #Counting the occurences of each type
+        type_counts = gdf['type_clean'].value_counts()
+
+        rare_types = type_counts[type_counts < minimum_count].index.tolist()
+
+        # Creating a separate list of types to model
+        gdf['model_type'] = gdf['type_clean']
+
+        gdf.loc[gdf["type_clean"].isin(rare_types),"model_type"] = "other"
+
+        self.model_types = sorted(gdf["model_type"].unique())
+
+        self.type_target_columns = []
+
+        #Creating a binary column for each landslide type
+        for landslide_type in self.model_types:
+            column_name = (landslide_type.replace(' ','_').replace('-','_').replace('/','_'))
+
+            gdf[column_name] = (gdf["model_type"] == landslide_type).astype(int)
+
+            self.type_target_columns.append(column_name)
+
+        self.landslide_locations_shp = gdf
 
     def setup(self):
         """
@@ -97,8 +141,18 @@ class DataPreparation(object):
         self.landslide_locations_shp = gpd.read_file(self.landslide_locations)
         self.nonlandslide_locations_shp = gpd.read_file(self.nonlandslide_locations)
 
+        # adds the landslide type preparation option
+        if self.landslide_types:
+            self.prepare_landslide_types()
+
         features = self.create_results_dict(self.factor_names)
-        targets = self.create_results_dict(['status_id'])
+
+        #add specific target columns, includes_type_target_column if landslide_types is enabled
+        if self.landslide_types:
+            target_columns= ['status_id'] + self.type_target_columns
+        else:
+            target_columns=['status_id']
+        targets = self.create_results_dict(target_columns)
 
         for nx, name in enumerate(self.factor_names):
             temp_index = 0
@@ -111,12 +165,28 @@ class DataPreparation(object):
                     features[name].append(np.nan)
                     if nx==0:
                         targets['status_id'].append(np.nan)
+
+                        #appending new type columns
+                        if self.landslide_types:
+                            for target_column in self.type_target_columns:
+                                targets[target_column].append(np.nan)
                     else:
                         targets['status_id'][temp_index] = np.nan
+                        #appending new type columns
+                        if self.landslide_types:
+                            for target_column in self.type_target_columns:
+                                targets[target_column][temp_index] = np.nan
+                        
                 else:
                     features[name].append(extracted_value)
                     if nx==0:
                         targets['status_id'].append(1)
+
+                        #adding landslide-type boolean columns
+                        if self.landslide_types:
+                            for target_column in self.type_target_columns:
+                                targets[target_column].append(int(self.landslide_locations_shp.iloc[px][target_column]))
+
                 temp_index += 1
 
             for px, point in enumerate(self.nonlandslide_locations_shp['geometry']):
@@ -128,12 +198,26 @@ class DataPreparation(object):
                     features[name].append(np.nan)
                     if nx==0:
                         targets['status_id'].append(np.nan)
+                        #appending new type columns
+                        if self.landslide_types:
+                            for target_column in self.type_target_columns:
+                                targets[target_column].append(np.nan)
                     else:                    
                         targets['status_id'][temp_index] = np.nan
+                        #appending new type columns
+                        if self.landslide_types:
+                            for target_column in self.type_target_columns:
+                                targets[target_column][temp_index] = np.nan                
                 else:
                     features[name].append(extracted_value)
                     if nx==0: 
                         targets['status_id'].append(0)
+
+                        #setting all landslide type columns to 0
+                        if self.landslide_types:
+                            for target_column in self.type_target_columns:
+                                targets[target_column].append(0)
+                        
                 temp_index += 1
 
         #write the results
@@ -239,8 +323,14 @@ class DataPreparation(object):
             dst_height.append(dst_height_temp)
 
         for ix, rff in enumerate(raster_files):
+
+            print(
+                f"\nAligning raster {ix + 1}/{len(raster_files)}: "
+                f"{os.path.basename(rff)}"
+            )
+
             with rasterio.open(rff) as rf: 
-                ddd = rf.read(1)
+                # ddd = rf.read(1)
                 dst_kwargs = rf.meta.copy()
                 dst_kwargs.update({"crs": coordinate_system[0],
                                 "transform": dst_transform[ix],
@@ -253,12 +343,16 @@ class DataPreparation(object):
                 with rasterio.open(outfiles[ix], "w", **dst_kwargs) as dst:
                     print(outfiles[ix])
                     for i in range(1, rf.count + 1):
+                        print(
+                            f"  Reprojecting band {i}/{rf.count}..."
+                        )
                         reproject(
                             source=rasterio.band(rf, i),
                             destination=rasterio.band(dst, i),
                             src_transform=rf.transform,
                             src_crs=rf.crs,
-                            dst_transform=dst_transform[0],
+                            # dst_transform=dst_transform[0],
+                            dst_transform=dst_transform[ix],
                             dst_crs=coordinate_system[0],
                             num_threads=4,
                             resampling=Resampling.nearest)

@@ -52,6 +52,22 @@ class SensitivityEstimator(object):
             raise ValueError('factors has not been found in the JSON file')
         self.factors = loaded_file.pop('factors')
 
+        # Adding the option to get senstivity for specific models
+        self.model_numbers = loaded_file.get("model_numbers")
+
+        if self.model_numbers is None:
+            print("No model specified, weights will be randomly generated")
+            self.random_generation = True
+        else:
+            self.random_generation = False
+            if not isinstance(self.model_numbers,list) or not self.model_numbers: #  check if theres iterations specified
+                raise ValueError("model_numbers must be a non-empty list of iteration numbers")
+
+            if any(isinstance(n,bool) or not isinstance(n,int) for n in self.model_numbers): #check to see if provided model_number is an int
+                raise ValueError("All values in model_numbers must be an interger and iteration number")
+            print("Sensitivity analysis will use iterations: ",self.model_numbers)
+            
+
         if loaded_file.get('susceptibility_classes') is None:
             raise ValueError('susceptibility_classes has not been found in the JSON file')
         self.susceptibility_classes = loaded_file.pop('susceptibility_classes')
@@ -115,6 +131,10 @@ class SensitivityEstimator(object):
         Creates a dictionary for saving the results of the execute() method.
         """
         results_dic = {}
+
+        #Add the iteration number
+        results_dic["rf_iteration"] = []
+
         for n in self.susceptibility_classes_names:
             results_dic[n]=[]
         for n in self.factor_weight_keys:
@@ -127,9 +147,34 @@ class SensitivityEstimator(object):
         """
         random_weights = []
         random_ix = random.randint(0, (data_length-1))
+
+        # Find the original iteration number and record the information
+        rf_iteration = int(input_pd_table.at[random_ix,"iteration"])
+
         for nx, name in enumerate(self.factor_names):
             random_weights.append(input_pd_table.at[random_ix,name])
-        return random_weights
+        return random_weights, rf_iteration
+
+    def get_model_weights(self, input_pd_table, rf_iteration):
+        """
+        Gets the factor weights for a specified iteration from the weight range csv file
+        """
+        #find the row that is for the requested iteration
+        model_row = input_pd_table.loc[input_pd_table["iteration"] == rf_iteration]
+
+        if model_row.empty:
+            raise ValueError(
+                f"Iteration in {rf_iteration} was not find in {self.weight_csv_sensitivity_file}"
+            )
+
+        #get the factor weights
+        model_weights = []
+
+        for name in self.factor_names:
+            model_weights.append(model_row.iloc[0][name])
+
+        return model_weights,rf_iteration
+
 
     def load_weight_csv_sensitivity_file(self, sens_csv):
         """
@@ -213,21 +258,50 @@ class SensitivityEstimator(object):
         weight_csv_sensitivity_data = self.load_weight_csv_sensitivity_file(self.weight_csv_sensitivity_file)
         sens_table_pd = weight_csv_sensitivity_data[0]
         availabel_items = weight_csv_sensitivity_data[1]
-        if (availabel_items<self.trials):
-            print("Warning: the number of trials is set to", availabel_items, ", as this is the maximum number of data available in", self.weight_csv_sensitivity_file)
 
+        # if (availabel_items<self.trials):
+        #     print("Warning: the number of trials is set to", availabel_items, ", as this is the maximum number of data available in", self.weight_csv_sensitivity_file)
+
+        #determining the number of sensitivity trials
+        if self.random_generation:
+            number_of_trials = self.trials
+
+        else:
+            #run a sensitivity tria for each specified model iteration
+            number_of_trials = len(self.model_numbers)
+
+            #check that all iteratons are available
+            available_iterations = set( sens_table_pd["iteration"].astype(int))
+
+            missing_iterations = [ n for n in self.model_numbers if n not in available_iterations] # specifies  if any requested iterations are not available
+
+            if missing_iterations:
+                raise ValueError(f"The following iterations were not found in the weightrange csv: {missing_iterations}")
         successful_trials = 0
-        while successful_trials < self.trials:
+        while successful_trials < number_of_trials:
             t0 = time.time()
-            weight_inputs = self.generate_random_weights(sens_table_pd, availabel_items)
+
+            # modify the loop to work for both random generation and specified iterations
+            if  self.random_generation:
+                weight_inputs,rf_iteration = self.generate_random_weights(sens_table_pd, availabel_items) #added model iteration
+
+            #adding the option to calculate specific iterations
+            else:
+                rf_iteration = self.model_numbers[successful_trials]
+                weight_inputs,rf_iteration = self.get_model_weights(sens_table_pd, rf_iteration)
+
             print("============================================ starting trial "+str(successful_trials+1))
             susceptability_assessment = self.overlay_factors(factor_weights=weight_inputs)
+
+            #Adding the iteration to the dictionary
+            final_results_dic["rf_iteration"].append(rf_iteration) 
+
             for sc, susceptibility_class in enumerate(self.susceptibility_classes_names):
                 final_results_dic[susceptibility_class].append(susceptability_assessment[sc])
             for wc, factor_weight_key in enumerate(self.factor_weight_keys):
                 final_results_dic[factor_weight_key].append(weight_inputs[wc])
 
-            percent = (successful_trials+1)/self.trials*100
+            percent = (successful_trials+1)/number_of_trials*100 #changed from self.trials to number of trials
             print("time taken in the trial", round((time.time()-t0),0), "seconds|progress: (trial =",successful_trials+1,") (percentage =", round(percent,2), "%)")
             successful_trials += 1  
 

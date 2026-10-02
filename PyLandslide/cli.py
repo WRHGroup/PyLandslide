@@ -6,6 +6,7 @@ import logging
 from PyLandslide.weightrange import *
 from PyLandslide.sensitivity import *
 from PyLandslide.data_preparation import *
+from PyLandslide.shap_analysis import SHAPAnalysis
 
 logger = logging.getLogger(__name__)
 
@@ -66,6 +67,15 @@ def compare(file_name, layer1, layer2):
     SensitivityModel = SensitivityEstimator(json_file=file_name)
     SensitivityModel.setup()
     SensitivityModel.compare(layer1=layer1, layer2=layer2)
+
+@cli.command(name='shap', help="Produces a shap value analysis for specified model iteration")
+@click.option('-f', '--file-name', type=str, default="4_shap_json_file.json", help="JSON file containing the SHAP config")
+def shap_analysis(file_name):
+    logger.info("Starting SHAP analysis")
+    SHAPModel = SHAPAnalysis(json_file=file_name)
+    SHAPModel.setup()
+    SHAPModel.execute()
+
 
 def start_cli():
     """ Start the command line interface. """
